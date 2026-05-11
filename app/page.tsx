@@ -1,16 +1,450 @@
 "use client";
+
 import { useState } from "react";
 import Image from "next/image";
 import { jsPDF } from "jspdf";
-const rates = {"4":{"3 Months":200,"6 Months":450,"9 Months":300,"12 Months":500},"6":{"3 Months":210,"6 Months":460,"9 Months":310,"12 Months":520},"8":{"3 Months":220,"6 Months":470,"9 Months":320,"12 Months":540}};
-const inputStyle={width:"100%",padding:"12px 14px",borderRadius:8,border:"1px solid #d0d7e2",boxSizing:"border-box"} as React.CSSProperties;
-function Field({label,type="text"}:{label:string;type?:string}){return <div><label style={{display:"block",fontSize:13,fontWeight:600,marginBottom:6}}>{label}</label><input type={type} style={inputStyle}/></div>}
-export default function Home(){const [step,setStep]=useState(1);const [cylinders,setCylinders]=useState("4");const [coverage,setCoverage]=useState("3 Months"); const premium=rates[cylinders][coverage];
-return <main><section style={{backgroundImage:"linear-gradient(rgba(11,47,107,0.82), rgba(46,99,201,0.82)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80')",backgroundSize:"cover",backgroundPosition:"center",color:"white",padding:"30px 0 80px"}}><div style={{maxWidth:1200,margin:"0 auto",padding:"0 24px"}}><Image src="/logo.png" alt="Atlantic Insurance" width={520} height={140} style={{background:"white",padding:18,borderRadius:16}}/><h1 style={{fontSize:54,marginTop:40}}>Buy Your Motor Insurance Online</h1><p style={{fontSize:22,maxWidth:760}}>Complete your application, upload your documents, calculate your premium and proceed to payment.</p></div></section>
-<section style={{maxWidth:1200,margin:"-40px auto 40px",padding:"0 24px"}}><div style={{background:"white",borderRadius:20,boxShadow:"0 20px 60px rgba(0,0,0,0.08)",padding:32}}>
-<div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:30}}>{["1. Applicant Information","2. Vehicle Information","3. Documents, Premium & Payment"].map((s,i)=><div key={s} style={{padding:"10px 14px",borderRadius:999,background:step===i+1?"#0b2f6b":"#eaf0fb",color:step===i+1?"white":"#0b2f6b",fontWeight:600,fontSize:14}}>{s}</div>)}</div>
-{step===1 && <><h2 style={{color:"#0b2f6b"}}>Identification of Applicant</h2><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}><Field label="First Name"/><Field label="Middle Name"/><Field label="Surname"/></div><div style={{marginTop:16}}><Field label="Company Name (Optional for Businesses)"/></div><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,marginTop:16}}><Field label="Social Security No. / Passport No."/><Field label="Date of Birth" type="date"/><Field label="Nationality"/><Field label="Source of Income"/><Field label="Occupation"/><Field label="Home Address"/><Field label="City / Town / Village"/><Field label="District"/><Field label="Telephone"/><Field label="Cellular"/><Field label="Email"/></div></>}
-{step===2 && <><h2 style={{color:"#0b2f6b"}}>Particulars of Vehicle Insured</h2><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}><Field label="Make"/><Field label="Model"/><Field label="Year Manufactured"/><Field label="Type"/><Field label="Registry No. or VIN"/><Field label="Capacity"/><div><label style={{display:"block",fontSize:13,fontWeight:600,marginBottom:6}}>Cylinders</label><select value={cylinders} onChange={e=>setCylinders(e.target.value)} style={inputStyle}><option value="4">4 Cylinders</option><option value="6">6 Cylinders</option><option value="8">8 Cylinders</option></select></div><Field label="Color"/><Field label="License Plate Number"/><Field label="Present Value"/></div></>}
-{step===3 && <><h2 style={{color:"#0b2f6b"}}>Documents, Premium & Payment</h2><div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:16,marginBottom:24}}>{["Driver's License","Vehicle Title","Social Security Card / Passport","Utility Bill"].map(label=><div key={label}><label style={{display:"block",fontSize:13,fontWeight:600,marginBottom:6}}>{label}</label><input type="file" style={inputStyle}/></div>)}</div><div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:24,marginBottom:24}}><div><label style={{display:"block",fontSize:13,fontWeight:600,marginBottom:6}}>Coverage Period</label><select value={coverage} onChange={e=>setCoverage(e.target.value)} style={inputStyle}><option>3 Months</option><option>6 Months</option><option>9 Months</option><option>12 Months</option></select></div><div style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:12,padding:20}}><div style={{fontSize:13,color:"#166534"}}>Premium</div><div style={{fontSize:38,fontWeight:700,color:"#15803d",marginTop:8}}>BZD {premium.toFixed(2)}</div></div></div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24}}><div style={{border:"2px dashed #cbd5e1",borderRadius:12,padding:30,textAlign:"center",color:"#64748b"}}><img src="/payment-qr.png" alt="Payment QR Code" style={{maxWidth:"100%", height:"auto", borderRadius:8}} /></div><div style={{display:"flex",flexDirection:"column",gap:10}}><a href="https://example.com/payment" target="_blank" rel="noreferrer" style={{background:"#22c55e",color:"white",textDecoration:"none",textAlign:"center",padding:"14px",borderRadius:8,fontWeight:700}}>Proceed to Payment</a>{["Client Data Form","Proposal Form","Policy Schedule","Certificate of Insurance"].map(doc=><button key={doc} style={{padding:"12px",borderRadius:8,border:"1px solid #cbd5e1",background:"white"}}>Print {doc}</button>)}</div></div></>}
-<div style={{display:"flex",justifyContent:"space-between",marginTop:32}}><button onClick={()=>setStep(Math.max(1,step-1))} disabled={step===1} style={{padding:"12px 24px",borderRadius:8,border:"1px solid #cbd5e1"}}>Back</button><button onClick={()=>setStep(Math.min(3,step+1))} style={{padding:"12px 24px",borderRadius:8,border:"none",background:"#22c55e",color:"white",fontWeight:700}}>{step===3?"Submit Application":"Next"}</button></div>
-</div></section></main>}
+
+const rates = {
+  "4": { "3 Months": 200, "6 Months": 450, "9 Months": 300, "12 Months": 500 },
+  "6": { "3 Months": 210, "6 Months": 460, "9 Months": 310, "12 Months": 520 },
+  "8": { "3 Months": 220, "6 Months": 470, "9 Months": 320, "12 Months": 540 },
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px 14px",
+  borderRadius: 8,
+  border: "1px solid #d0d7e2",
+  boxSizing: "border-box",
+} as React.CSSProperties;
+
+function Field({
+  label,
+  type = "text",
+}: {
+  label: string;
+  type?: string;
+}) {
+  return (
+    <div>
+      <label
+        style={{
+          display: "block",
+          fontSize: 13,
+          fontWeight: 600,
+          marginBottom: 6,
+        }}
+      >
+        {label}
+      </label>
+      <input type={type} style={inputStyle} />
+    </div>
+  );
+}
+
+export default function Home() {
+  const [step, setStep] = useState(1);
+  const [cylinders, setCylinders] = useState("4");
+  const [coverage, setCoverage] = useState("3 Months");
+
+  const premium =
+    rates[cylinders as keyof typeof rates][
+      coverage as keyof (typeof rates)["4"]
+    ];
+
+  function generatePdf(title: string) {
+    const doc = new jsPDF();
+
+    doc.setFontSize(22);
+    doc.text("Atlantic Insurance Company Ltd.", 20, 20);
+
+    doc.setFontSize(16);
+    doc.text(title, 20, 35);
+
+    doc.setFontSize(11);
+    doc.text(`Coverage Period: ${coverage}`, 20, 55);
+    doc.text(`Cylinders: ${cylinders}`, 20, 65);
+    doc.text(`Premium: BZD ${premium.toFixed(2)}`, 20, 75);
+    doc.text("Generated from Atlantic Insurance Online Prototype", 20, 95);
+
+    const filename =
+      title.toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".pdf";
+
+    doc.save(filename);
+  }
+
+  return (
+    <main>
+      <section
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(11,47,107,0.82), rgba(46,99,201,0.82)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          color: "white",
+          padding: "30px 0 80px",
+        }}
+      >
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+          <Image
+            src="/logo.png"
+            alt="Atlantic Insurance"
+            width={520}
+            height={140}
+            style={{
+              background: "white",
+              padding: 18,
+              borderRadius: 16,
+            }}
+          />
+          <h1 style={{ fontSize: 54, marginTop: 40 }}>
+            Buy Your Motor Insurance Online
+          </h1>
+          <p style={{ fontSize: 22, maxWidth: 760 }}>
+            Complete your application, upload your documents, calculate your
+            premium and proceed to payment.
+          </p>
+        </div>
+      </section>
+
+      <section
+        style={{
+          maxWidth: 1200,
+          margin: "-40px auto 40px",
+          padding: "0 24px",
+        }}
+      >
+        <div
+          style={{
+            background: "white",
+            borderRadius: 20,
+            boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
+            padding: 32,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              flexWrap: "wrap",
+              marginBottom: 30,
+            }}
+          >
+            {[
+              "1. Applicant Information",
+              "2. Vehicle Information",
+              "3. Documents, Premium & Payment",
+            ].map((s, i) => (
+              <div
+                key={s}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: 999,
+                  background: step === i + 1 ? "#0b2f6b" : "#eaf0fb",
+                  color: step === i + 1 ? "white" : "#0b2f6b",
+                  fontWeight: 600,
+                  fontSize: 14,
+                }}
+              >
+                {s}
+              </div>
+            ))}
+          </div>
+
+          {step === 1 && (
+            <>
+              <h2 style={{ color: "#0b2f6b" }}>Identification of Applicant</h2>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3,1fr)",
+                  gap: 16,
+                }}
+              >
+                <Field label="First Name" />
+                <Field label="Middle Name" />
+                <Field label="Surname" />
+              </div>
+
+              <div style={{ marginTop: 16 }}>
+                <Field label="Company Name (Optional for Businesses)" />
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3,1fr)",
+                  gap: 16,
+                  marginTop: 16,
+                }}
+              >
+                <Field label="Social Security No. / Passport No." />
+                <Field label="Date of Birth" type="date" />
+                <Field label="Nationality" />
+                <Field label="Source of Income" />
+                <Field label="Occupation" />
+                <Field label="Home Address" />
+                <Field label="City / Town / Village" />
+                <Field label="District" />
+                <Field label="Telephone" />
+                <Field label="Cellular" />
+                <Field label="Email" />
+              </div>
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <h2 style={{ color: "#0b2f6b" }}>
+                Particulars of Vehicle Insured
+              </h2>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3,1fr)",
+                  gap: 16,
+                }}
+              >
+                <Field label="Make" />
+                <Field label="Model" />
+                <Field label="Year Manufactured" />
+                <Field label="Type" />
+                <Field label="Registry No. or VIN" />
+                <Field label="Capacity" />
+
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Cylinders
+                  </label>
+                  <select
+                    value={cylinders}
+                    onChange={(e) => setCylinders(e.target.value)}
+                    style={inputStyle}
+                  >
+                    <option value="4">4 Cylinders</option>
+                    <option value="6">6 Cylinders</option>
+                    <option value="8">8 Cylinders</option>
+                  </select>
+                </div>
+
+                <Field label="Color" />
+                <Field label="License Plate Number" />
+                <Field label="Present Value" />
+              </div>
+            </>
+          )}
+
+          {step === 3 && (
+            <>
+              <h2 style={{ color: "#0b2f6b" }}>
+                Documents, Premium & Payment
+              </h2>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2,1fr)",
+                  gap: 16,
+                  marginBottom: 24,
+                }}
+              >
+                {[
+                  "Driver's License",
+                  "Vehicle Title",
+                  "Social Security Card / Passport",
+                  "Utility Bill",
+                ].map((label) => (
+                  <div key={label}>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: 13,
+                        fontWeight: 600,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {label}
+                    </label>
+                    <input type="file" style={inputStyle} />
+                  </div>
+                ))}
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "2fr 1fr",
+                  gap: 24,
+                  marginBottom: 24,
+                }}
+              >
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Coverage Period
+                  </label>
+                  <select
+                    value={coverage}
+                    onChange={(e) => setCoverage(e.target.value)}
+                    style={inputStyle}
+                  >
+                    <option>3 Months</option>
+                    <option>6 Months</option>
+                    <option>9 Months</option>
+                    <option>12 Months</option>
+                  </select>
+                </div>
+
+                <div
+                  style={{
+                    background: "#f0fdf4",
+                    border: "1px solid #bbf7d0",
+                    borderRadius: 12,
+                    padding: 20,
+                  }}
+                >
+                  <div style={{ fontSize: 13, color: "#166534" }}>
+                    Premium
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 38,
+                      fontWeight: 700,
+                      color: "#15803d",
+                      marginTop: 8,
+                    }}
+                  >
+                    BZD {premium.toFixed(2)}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 24,
+                }}
+              >
+                <div
+                  style={{
+                    border: "2px dashed #cbd5e1",
+                    borderRadius: 12,
+                    padding: 30,
+                    textAlign: "center",
+                    color: "#64748b",
+                  }}
+                >
+                  <img
+                    src="/payment-qr.png"
+                    alt="Payment QR Code"
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      borderRadius: 8,
+                    }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
+                  <a
+                    href="https://example.com/payment"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      background: "#22c55e",
+                      color: "white",
+                      textDecoration: "none",
+                      textAlign: "center",
+                      padding: "14px",
+                      borderRadius: 8,
+                      fontWeight: 700,
+                    }}
+                  >
+                    Proceed to Payment
+                  </a>
+
+                  {[
+                    "Client Data Form",
+                    "Proposal Form",
+                    "Policy Schedule",
+                    "Certificate of Insurance",
+                  ].map((doc) => (
+                    <button
+                      key={doc}
+                      onClick={() => generatePdf(doc)}
+                      style={{
+                        padding: "12px",
+                        borderRadius: 8,
+                        border: "1px solid #cbd5e1",
+                        background: "white",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Print {doc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 32,
+            }}
+          >
+            <button
+              onClick={() => setStep(Math.max(1, step - 1))}
+              disabled={step === 1}
+              style={{
+                padding: "12px 24px",
+                borderRadius: 8,
+                border: "1px solid #cbd5e1",
+              }}
+            >
+              Back
+            </button>
+
+            <button
+              onClick={() => setStep(Math.min(3, step + 1))}
+              style={{
+                padding: "12px 24px",
+                borderRadius: 8,
+                border: "none",
+                background: "#22c55e",
+                color: "white",
+                fontWeight: 700,
+              }}
+            >
+              {step === 3 ? "Submit Application" : "Next"}
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
