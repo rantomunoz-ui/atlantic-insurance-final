@@ -48,7 +48,7 @@ export default function Home() {
   const [coverage, setCoverage] = useState("3 Months");
 
   const premium = 0;
-    
+  
   return (
     <main>
       <section
