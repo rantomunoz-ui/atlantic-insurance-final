@@ -48,10 +48,10 @@ export default function Home() {
   const [coverage, setCoverage] = useState("3 Months");
 
   const premium = 0;
-  
+
   return (
     <main>
-      <section
+        <section
         style={{
           backgroundImage:
             "linear-gradient(rgba(11,47,107,0.82), rgba(46,99,201,0.82)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80')",
