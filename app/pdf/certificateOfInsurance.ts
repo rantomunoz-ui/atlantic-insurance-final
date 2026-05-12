@@ -110,14 +110,14 @@ doc.text(policyNo, 138, 56);
 
 // Row 2 - Left cell
 doc.setFont("helvetica", "bold");
-doc.text("3. Date of Insured:", 18, 68);
+doc.text("3. Date of Insured:", 8, 68);
 
 doc.setFont("helvetica", "normal");
 doc.text(commencementDate, 92, 68);
 
 // Row 2 - Right cell
 doc.setFont("helvetica", "bold");
-doc.text("4. Expiration Date:", 108, 68);
+doc.text("4. Expiration Date:", 68, 68);
 
 doc.setFont("helvetica", "normal");
 doc.text(expirationDate, 170, 68);
