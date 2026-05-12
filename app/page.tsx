@@ -365,12 +365,56 @@ export default function Home() {
                     Proceed to Payment
                   </a>
 
-                  {[
-                    "Client Data Form",
-                    "Proposal Form",
-                    "Policy Schedule",
-                    "Certificate of Insurance",
-                  ].map((doc) => (
+                  {// In app/page.tsx, replace the four Print buttons section with this:
+
+{[
+  "Client Data Form",
+  "Proposal Form",
+  "Policy Schedule",
+  "Certificate of Insurance",
+].map((doc) => (
+  <button
+    key={doc}
+    onClick={() =>
+      generatePdf(doc, {
+        // Applicant Information
+        firstName,
+        middleName,
+        surname,
+        companyName,
+        homeAddress,
+        city,
+        district,
+        telephone,
+        cellular,
+        email,
+
+        // Vehicle Information
+        make,
+        model,
+        yearManufactured,
+        type,
+        registryNo,
+        licensePlate,
+        color,
+        cylinders,
+
+        // Policy Information
+        coverage,
+        premium,
+      })
+    }
+    style={{
+      padding: "12px",
+      borderRadius: 8,
+      border: "1px solid #cbd5e1",
+      background: "white",
+      cursor: "pointer",
+    }}
+  >
+    Print {doc}
+  </button>
+))}
                     <button
                       key={doc}
                       onClick={() =>
