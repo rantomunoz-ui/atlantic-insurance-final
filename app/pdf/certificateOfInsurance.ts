@@ -25,6 +25,7 @@ export function generateCertificateOfInsurance(data: any) {
 
   const expiryDate = new Date(startDate);
   expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
+expiryDate.setDate(expiryDate.getDate() - 1);
 
   // Basic values
   const issueDate = formatDate(startDate);
