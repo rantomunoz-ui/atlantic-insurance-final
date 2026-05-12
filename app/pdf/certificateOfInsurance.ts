@@ -50,44 +50,7 @@ expiryDate.setDate(expiryDate.getDate() - 1);
   const makeModel = `${data.make || ""} ${data.model || ""}`.trim();
 
   // ===== HEADER =====
-  const img = new Image();
-img.src = "/logo.png";
-
-img.onload = () => {
-  doc.addImage(img, "PNG", 25, 5, 170, 40);
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", 105, 40, {
-    align: "center",
-  });
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(9);
-  doc.text(
-    "MOTOR VEHICLE INSURANCE (THIRD PARTY RISKS) ACT, 2000",
-    105,
-    46,
-    { align: "center" }
-  );
-
-  // Move all remaining PDF code here.
-};
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", 105, 25, {
-    align: "center",
-  });
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(9);
-  doc.text(
-    "MOTOR VEHICLE INSURANCE (THIRD PARTY RISKS) ACT, 2000",
-    105,
-    31,
-    { align: "center" }
-  );
+  
 
   // ===== CERTIFICATE INFO =====
   doc.setFontSize(10);
