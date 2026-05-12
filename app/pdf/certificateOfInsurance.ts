@@ -60,7 +60,7 @@ img.onload = () => {
   // Certificate title
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", 105, 48, {
+  doc.text("CERTIFICATE OF INSURANCE", 105, 38, {
     align: "center",
   });
 
@@ -70,7 +70,7 @@ img.onload = () => {
   doc.text(
     "MOTOR VEHICLE INSURANCE (THIRD PARTY RISKS) ACT, 2000",
     105,
-    54,
+    44,
     { align: "center" }
   );
 
