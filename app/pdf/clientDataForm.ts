@@ -14,5 +14,5 @@ export function generateClientDataForm(data: any) {
   doc.text(`Cylinders: ${data.cylinders}`, 20, 65);
   doc.text(`Premium: BZD ${data.premium.toFixed(2)}`, 20, 75);
 
-  doc.save("client-data-form.pdf");
+  doc.save("client-data-form-" + Date.now() + ".pdf");
 }
