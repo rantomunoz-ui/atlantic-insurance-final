@@ -60,7 +60,7 @@ img.onload = () => {
   // Certificate title
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", 105, 18, {
+  doc.text("CERTIFICATE OF INSURANCE", 105, 38, {
     align: "center",
   });
 
