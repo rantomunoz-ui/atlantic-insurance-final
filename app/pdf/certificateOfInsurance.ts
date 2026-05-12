@@ -258,4 +258,4 @@ img.onload = () => {
 
   // ===== SAVE =====
   doc.save("certificate-of-insurance-" + Date.now() + ".pdf");
-}
+};
