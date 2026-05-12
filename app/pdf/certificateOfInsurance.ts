@@ -54,7 +54,7 @@ expiryDate.setDate(expiryDate.getDate() - 1);
 img.src = "/logo.png";
 
 img.onload = () => {
-  doc.addImage(img, "PNG", 25, 5, 160, 30);
+  doc.addImage(img, "PNG", 25, 5, 170, 40);
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
