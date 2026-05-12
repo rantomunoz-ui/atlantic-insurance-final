@@ -76,24 +76,51 @@ img.onload = () => {
 
 
   // ===== CERTIFICATE INFO =====
-  doc.setFontSize(10);
-  doc.text(`Certificate Number: ${certificateNo}`, 15, 42);
-  doc.text(`Policy No.: ${policyNo}`, 110, 42);
+  // Replace lines 79 to 96 with this exact code:
 
-  // ===== SECTION 1 =====
-  doc.rect(15, 48, 180, 10);
-  doc.text("1. Name of Policyholder", 17, 54);
-  doc.text(insuredName, 80, 54);
+doc.setFontSize(10);
 
-  // ===== SECTION 2 =====
-  doc.rect(15, 58, 180, 10);
-  doc.text("2. Date of Commencement of Insurance", 17, 64);
-  doc.text(commencementDate, 110, 64);
+// Certificate Number only
+doc.text(`Certificate Number: ${certificateNo}`, 15, 42);
 
-  // ===== SECTION 3 =====
-  doc.rect(15, 68, 180, 10);
-  doc.text("3. Date of Expiry of Insurance", 17, 74);
-  doc.text(expirationDate, 110, 74);
+// ===== POLICY INFORMATION TABLE =====
+
+// Outer box
+doc.rect(15, 48, 180, 24);
+
+// Vertical divider
+doc.line(105, 48, 105, 72);
+
+// Horizontal divider
+doc.line(15, 60, 195, 60);
+
+// Row 1 - Left cell
+doc.setFont("helvetica", "bold");
+doc.text("1. Name of Policyholder:", 18, 56);
+
+doc.setFont("helvetica", "normal");
+doc.text(insuredName, 65, 56);
+
+// Row 1 - Right cell
+doc.setFont("helvetica", "bold");
+doc.text("2. Policy No.:", 108, 56);
+
+doc.setFont("helvetica", "normal");
+doc.text(policyNo, 138, 56);
+
+// Row 2 - Left cell
+doc.setFont("helvetica", "bold");
+doc.text("3. Date of Commencement of Insurance:", 18, 68);
+
+doc.setFont("helvetica", "normal");
+doc.text(commencementDate, 92, 68);
+
+// Row 2 - Right cell
+doc.setFont("helvetica", "bold");
+doc.text("4. Date of Expiry of Insurance:", 108, 68);
+
+doc.setFont("helvetica", "normal");
+doc.text(expirationDate, 170, 68);
 
   // ===== SECTION 4 =====
   doc.rect(15, 78, 180, 30);
