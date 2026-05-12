@@ -110,17 +110,17 @@ doc.text(policyNo, 138, 56);
 
 // Row 2 - Left cell
 doc.setFont("helvetica", "bold");
-doc.text("3. Date of Insured:", 8, 68);
+doc.text("3. Date of Insured:", 18, 68);
 
 doc.setFont("helvetica", "normal");
-doc.text(commencementDate, 92, 68);
+doc.text(commencementDate, 65, 68);
 
 // Row 2 - Right cell
 doc.setFont("helvetica", "bold");
-doc.text("4. Expiration Date:", 68, 68);
+doc.text("4. Expiration Date:", 108, 68);
 
 doc.setFont("helvetica", "normal");
-doc.text(expirationDate, 170, 68);
+doc.text(expirationDate, 138, 68);
 
   // ===== SECTION 4 =====
   doc.rect(15, 78, 180, 30);
@@ -135,7 +135,7 @@ doc.text(expirationDate, 170, 68);
   // ===== SECTION 5 =====
   doc.rect(15, 108, 180, 20);
   doc.text("5. Type of Coverage", 17, 114);
-  doc.text(coverageType, 80, 114);
+  doc.text(coverageType, 65, 114);
   doc.text(`Coverage Period: ${data.coverage || ""}`, 17, 121);
   doc.text(`Premium: BZD ${(data.premium ?? 0).toFixed(2)}`, 110, 121);
 
