@@ -47,10 +47,7 @@ export default function Home() {
   const [cylinders, setCylinders] = useState("4");
   const [coverage, setCoverage] = useState("3 Months");
 
-  const premium =
-  rates[cylinders as keyof typeof rates][
-    coverage as keyof (typeof rates)["4"]
-  ];
+  const premium = 0;
     
   return (
     <main>
