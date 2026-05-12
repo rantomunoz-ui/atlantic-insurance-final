@@ -55,7 +55,7 @@ img.src = "/logo.png";
 
 img.onload = () => {
   // Add logo
-  doc.addImage(img, "PNG", 15, 5, 180, 35);
+  doc.addImage(img, "PNG", 15, 5, 80, 20);
 
   // Certificate title
   doc.setFont("helvetica", "bold");
