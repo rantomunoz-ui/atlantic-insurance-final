@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Suspense } from "react";
@@ -18,10 +17,29 @@ function VerifyContent() {
     <main style={{ padding: 40 }}>
       <h1>Certificate Verification</h1>
       <p>Certificate Number: {cert}</p>
+
       <button
         onClick={handleDownload}
         style={{
           padding: "12px 24px",
           borderRadius: 8,
           border: "none",
-          background: "#
+          background: "#0b2f6b",
+          color: "white",
+          cursor: "pointer",
+          marginTop: 20,
+        }}
+      >
+        Download Certificate of Insurance
+      </button>
+    </main>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyContent />
+    </Suspense>
+  );
+}
