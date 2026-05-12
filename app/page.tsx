@@ -84,12 +84,6 @@ export default function Home() {
         </div>
       </section>
 
-        style={{
-          maxWidth: 1200,
-          margin: "-40px auto 40px",
-          padding: "0 24px",
-        }}
-      >
         <div
           style={{
             background: "white",
