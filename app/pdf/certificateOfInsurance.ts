@@ -55,12 +55,12 @@ img.src = "/logo.png";
 
 img.onload = () => {
   // Add logo
-  doc.addImage(img, "PNG", 15, 5, 80, 20);
+  doc.addImage(img, "PNG", 15, 5, 70, 20);
 
   // Certificate title
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", 105, 38, {
+  doc.text("CERTIFICATE OF INSURANCE", 105, 32, {
     align: "center",
   });
 
