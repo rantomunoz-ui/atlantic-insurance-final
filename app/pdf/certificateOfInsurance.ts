@@ -50,7 +50,30 @@ expiryDate.setDate(expiryDate.getDate() - 1);
   const makeModel = `${data.make || ""} ${data.model || ""}`.trim();
 
   // ===== HEADER =====
-  
+  const img = new Image();
+img.src = "/logo.png";
+
+img.onload = () => {
+  // Add logo
+  doc.addImage(img, "PNG", 15, 5, 180, 35);
+
+  // Certificate title
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("CERTIFICATE OF INSURANCE", 105, 48, {
+    align: "center",
+  });
+
+  // Subtitle
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.text(
+    "MOTOR VEHICLE INSURANCE (THIRD PARTY RISKS) ACT, 2000",
+    105,
+    54,
+    { align: "center" }
+  );
+
 
   // ===== CERTIFICATE INFO =====
   doc.setFontSize(10);
