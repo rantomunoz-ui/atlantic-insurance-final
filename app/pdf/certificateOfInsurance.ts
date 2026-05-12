@@ -123,7 +123,7 @@ doc.setFont("helvetica", "normal");
 doc.text(expirationDate, 138, 68);
 
   // ===== SECTION 4 =====
-  doc.rect(15, 78, 180, 30);
+  doc.rect(15, 72, 180, 30);
   doc.text("4. Vehicle(s) Covered", 17, 84);
   doc.text(`Make & Model: ${makeModel}`, 20, 91);
   doc.text(`Year: ${data.yearManufactured || ""}`, 20, 97);
