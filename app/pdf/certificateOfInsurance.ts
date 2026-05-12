@@ -254,8 +254,7 @@ img.onload = () => {
   doc.text(`Signed in Belize City on ${issueDate}`, 15, 284);
 
   const verificationUrl =
-  "https://atlantic-insurance-final.vercel.app/verify?cert=" + certificateNo;
-
+  "https://atlantic-insurance-final.vercel.app/?cert=" + certificateNo;
 const qrUrl =
   "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" +
   encodeURIComponent(verificationUrl);
