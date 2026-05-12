@@ -50,7 +50,7 @@ export default function Home() {
   const premium =
     rates[cylinders as keyof typeof rates][
       coverage as keyof (typeof rates)["4"]
-    );
+    ];
 
   return (
     <main>
