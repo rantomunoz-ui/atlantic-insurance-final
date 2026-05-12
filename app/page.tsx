@@ -47,10 +47,14 @@ export default function Home() {
   const [cylinders, setCylinders] = useState("4");
   const [coverage, setCoverage] = useState("3 Months");
 
-  const premium = 0;
+  const premium =
+    rates[cylinders as keyof typeof rates][
+      coverage as keyof (typeof rates)["4"]
+    ];
 
   return (
-        <section
+    <main>
+      <section
         style={{
           backgroundImage:
             "linear-gradient(rgba(11,47,107,0.82), rgba(46,99,201,0.82)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80')",
@@ -84,6 +88,7 @@ export default function Home() {
         </div>
       </section>
 
+      <section style={{ maxWidth: 1200, margin: "-40px auto 40px", padding: "0 24px" }}>
         <div
           style={{
             background: "white",
@@ -136,31 +141,6 @@ export default function Home() {
                 <Field label="Middle Name" />
                 <Field label="Surname" />
               </div>
-
-              <div style={{ marginTop: 16 }}>
-                <Field label="Company Name (Optional for Businesses)" />
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3,1fr)",
-                  gap: 16,
-                  marginTop: 16,
-                }}
-              >
-                <Field label="Social Security No. / Passport No." />
-                <Field label="Date of Birth" type="date" />
-                <Field label="Nationality" />
-                <Field label="Source of Income" />
-                <Field label="Occupation" />
-                <Field label="Home Address" />
-                <Field label="City / Town / Village" />
-                <Field label="District" />
-                <Field label="Telephone" />
-                <Field label="Cellular" />
-                <Field label="Email" />
-              </div>
             </>
           )}
 
@@ -180,9 +160,6 @@ export default function Home() {
                 <Field label="Make" />
                 <Field label="Model" />
                 <Field label="Year Manufactured" />
-                <Field label="Type" />
-                <Field label="Registry No. or VIN" />
-                <Field label="Capacity" />
 
                 <div>
                   <label
@@ -205,10 +182,6 @@ export default function Home() {
                     <option value="8">8 Cylinders</option>
                   </select>
                 </div>
-
-                <Field label="Color" />
-                <Field label="License Plate Number" />
-                <Field label="Present Value" />
               </div>
             </>
           )}
@@ -218,36 +191,6 @@ export default function Home() {
               <h2 style={{ color: "#0b2f6b" }}>
                 Documents, Premium & Payment
               </h2>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2,1fr)",
-                  gap: 16,
-                  marginBottom: 24,
-                }}
-              >
-                {[
-                  "Driver's License",
-                  "Vehicle Title",
-                  "Social Security Card / Passport",
-                  "Utility Bill",
-                ].map((label) => (
-                  <div key={label}>
-                    <label
-                      style={{
-                        display: "block",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        marginBottom: 6,
-                      }}
-                    >
-                      {label}
-                    </label>
-                    <input type="file" style={inputStyle} />
-                  </div>
-                ))}
-              </div>
 
               <div
                 style={{
@@ -307,124 +250,37 @@ export default function Home() {
 
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 24,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
                 }}
               >
-                <div
-                  style={{
-                    border: "2px dashed #cbd5e1",
-                    borderRadius: 12,
-                    padding: 30,
-                    textAlign: "center",
-                  }}
-                >
-                  <img
-                    src="/payment-qr.png"
-                    alt="Payment QR Code"
+                {[
+                  "Client Data Form",
+                  "Proposal Form",
+                  "Policy Schedule",
+                  "Certificate of Insurance",
+                ].map((doc) => (
+                  <button
+                    key={doc}
+                    onClick={() =>
+                      generatePdf(doc, {
+                        coverage,
+                        cylinders,
+                        premium,
+                      })
+                    }
                     style={{
-                      maxWidth: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 10,
-                  }}
-                >
-                  <a
-                    href="https://example.com/payment"
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      background: "#22c55e",
-                      color: "white",
-                      textDecoration: "none",
-                      textAlign: "center",
-                      padding: "14px",
+                      padding: "12px",
                       borderRadius: 8,
-                      fontWeight: 700,
+                      border: "1px solid #cbd5e1",
+                      background: "white",
+                      cursor: "pointer",
                     }}
                   >
-                    Proceed to Payment
-                  </a>
-
-                  {// In app/page.tsx, replace the four Print buttons section with this:
-
-{[
-  "Client Data Form",
-  "Proposal Form",
-  "Policy Schedule",
-  "Certificate of Insurance",
-].map((doc) => (
-  <button
-    key={doc}
-    onClick={() =>
-      generatePdf(doc, {
-        // Applicant Information
-        firstName,
-        middleName,
-        surname,
-        companyName,
-        homeAddress,
-        city,
-        district,
-        telephone,
-        cellular,
-        email,
-
-        // Vehicle Information
-        make,
-        model,
-        yearManufactured,
-        type,
-        registryNo,
-        licensePlate,
-        color,
-        cylinders,
-
-        // Policy Information
-        coverage,
-        premium,
-      })
-    }
-    style={{
-      padding: "12px",
-      borderRadius: 8,
-      border: "1px solid #cbd5e1",
-      background: "white",
-      cursor: "pointer",
-    }}
-  >
-    Print {doc}
-  </button>
-))}
-                    <button
-                      key={doc}
-                      onClick={() =>
-                        generatePdf(doc, {
-                          coverage,
-                          cylinders,
-                          premium,
-                        })
-                      }
-                      style={{
-                        padding: "12px",
-                        borderRadius: 8,
-                        border: "1px solid #cbd5e1",
-                        background: "white",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Print {doc}
-                    </button>
-                  ))}
-                </div>
+                    Print {doc}
+                  </button>
+                ))}
               </div>
             </>
           )}
