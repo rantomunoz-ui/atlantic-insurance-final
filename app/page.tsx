@@ -20,9 +20,13 @@ const inputStyle: React.CSSProperties = {
 
 function Field({
   label,
+  value,
+  onChange,
   type = "text",
 }: {
   label: string;
+  value: string;
+  onChange: (value: string) => void;
   type?: string;
 }) {
   return (
@@ -37,13 +41,41 @@ function Field({
       >
         {label}
       </label>
-      <input type={type} style={inputStyle} />
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        style={inputStyle}
+      />
     </div>
   );
 }
 
 export default function Home() {
   const [step, setStep] = useState(1);
+
+  // Applicant Information
+  const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [homeAddress, setHomeAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [cellular, setCellular] = useState("");
+  const [email, setEmail] = useState("");
+
+  // Vehicle Information
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+  const [yearManufactured, setYearManufactured] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
+  const [registryNo, setRegistryNo] = useState("");
+  const [licensePlate, setLicensePlate] = useState("");
+  const [color, setColor] = useState("");
+
+  // Policy Information
   const [cylinders, setCylinders] = useState("4");
   const [coverage, setCoverage] = useState("3 Months");
 
@@ -88,7 +120,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ maxWidth: 1200, margin: "-40px auto 40px", padding: "0 24px" }}>
+      <section
+        style={{
+          maxWidth: 1200,
+          margin: "-40px auto 40px",
+          padding: "0 24px",
+        }}
+      >
         <div
           style={{
             background: "white",
@@ -137,9 +175,33 @@ export default function Home() {
                   gap: 16,
                 }}
               >
-                <Field label="First Name" />
-                <Field label="Middle Name" />
-                <Field label="Surname" />
+                <Field label="First Name" value={firstName} onChange={setFirstName} />
+                <Field label="Middle Name" value={middleName} onChange={setMiddleName} />
+                <Field label="Surname" value={surname} onChange={setSurname} />
+              </div>
+
+              <div style={{ marginTop: 16 }}>
+                <Field
+                  label="Company Name (Optional for Businesses)"
+                  value={companyName}
+                  onChange={setCompanyName}
+                />
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3,1fr)",
+                  gap: 16,
+                  marginTop: 16,
+                }}
+              >
+                <Field label="Home Address" value={homeAddress} onChange={setHomeAddress} />
+                <Field label="City / Town / Village" value={city} onChange={setCity} />
+                <Field label="District" value={district} onChange={setDistrict} />
+                <Field label="Telephone" value={telephone} onChange={setTelephone} />
+                <Field label="Cellular" value={cellular} onChange={setCellular} />
+                <Field label="Email" value={email} onChange={setEmail} />
               </div>
             </>
           )}
@@ -157,9 +219,21 @@ export default function Home() {
                   gap: 16,
                 }}
               >
-                <Field label="Make" />
-                <Field label="Model" />
-                <Field label="Year Manufactured" />
+                <Field label="Make" value={make} onChange={setMake} />
+                <Field label="Model" value={model} onChange={setModel} />
+                <Field
+                  label="Year Manufactured"
+                  value={yearManufactured}
+                  onChange={setYearManufactured}
+                />
+                <Field label="Type" value={vehicleType} onChange={setVehicleType} />
+                <Field label="Registry No. or VIN" value={registryNo} onChange={setRegistryNo} />
+                <Field
+                  label="License Plate Number"
+                  value={licensePlate}
+                  onChange={setLicensePlate}
+                />
+                <Field label="Color" value={color} onChange={setColor} />
 
                 <div>
                   <label
@@ -265,8 +339,25 @@ export default function Home() {
                     key={doc}
                     onClick={() =>
                       generatePdf(doc, {
-                        coverage,
+                        firstName,
+                        middleName,
+                        surname,
+                        companyName,
+                        homeAddress,
+                        city,
+                        district,
+                        telephone,
+                        cellular,
+                        email,
+                        make,
+                        model,
+                        yearManufactured,
+                        type: vehicleType,
+                        registryNo,
+                        licensePlate,
+                        color,
                         cylinders,
+                        coverage,
                         premium,
                       })
                     }
