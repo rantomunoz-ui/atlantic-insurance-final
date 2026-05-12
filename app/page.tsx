@@ -84,7 +84,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section
         style={{
           maxWidth: 1200,
           margin: "-40px auto 40px",
