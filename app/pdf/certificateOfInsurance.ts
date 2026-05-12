@@ -36,7 +36,7 @@ expiryDate.setDate(expiryDate.getDate() - 1);
     data.certificateNo ||
     "C-" + Math.floor(10000 + Math.random() * 90000);
 
-  const policyNo = data.policyNo || "BN.11.2033.2024";
+  const policyNo = data.policyNo || "PE.11.0011.2026";
 
   const insuredName =
     `${data.firstName || ""} ${data.middleName || ""} ${
@@ -45,7 +45,7 @@ expiryDate.setDate(expiryDate.getDate() - 1);
 
   const coverageType =
     data.coverageType ||
-    "COMPREHENSIVE WITH HURRICANE, PASSENGER LIABILITY";
+    "THIRD PARTY ACT";
 
   const makeModel = `${data.make || ""} ${data.model || ""}`.trim();
 
