@@ -50,7 +50,6 @@ export default function Home() {
   const premium = 0;
 
   return (
-    <main>
         <section
         style={{
           backgroundImage:
