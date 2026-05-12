@@ -1,9 +1,11 @@
+
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { generateCertificateOfInsurance } from "../pdf/certificateOfInsurance";
 
-export default function VerifyPage() {
+function VerifyContent() {
   const searchParams = useSearchParams();
   const cert = searchParams.get("cert");
 
@@ -22,14 +24,4 @@ export default function VerifyPage() {
           padding: "12px 24px",
           borderRadius: 8,
           border: "none",
-          background: "#0b2f6b",
-          color: "white",
-          cursor: "pointer",
-          marginTop: 20,
-        }}
-      >
-        Download Certificate of Insurance
-      </button>
-    </main>
-  );
-}
+          background: "#
