@@ -253,8 +253,19 @@ img.onload = () => {
   doc.setFontSize(9);
   doc.text(`Signed in Belize City on ${issueDate}`, 15, 284);
 
-  doc.text("______________________________", 130, 284);
-  doc.text("Atlantic Insurance Company Ltd.", 132, 289);
+  const verificationUrl =
+  "https://atlantic-insurance-final.vercel.app/verify?cert=" + certificateNo;
+
+const qrUrl =
+  "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" +
+  encodeURIComponent(verificationUrl);
+
+const qrImg = new Image();
+qrImg.src = qrUrl;
+
+qrImg.onload = () => {
+  // Bottom-right corner
+  doc.addImage(qrImg, "PNG", 165, 250, 25, 25);
 
   // ===== SAVE =====
   doc.save("certificate-of-insurance-" + Date.now() + ".pdf");
