@@ -86,7 +86,7 @@ export default function Home() {
 const codeBoxStyle = {
   width: 55,
   height: 55,
-  textAlign: "center" as const,
+  textAlign: "center",
   fontSize: 24,
   border: "1px solid #ccc",
   borderRadius: 8,
