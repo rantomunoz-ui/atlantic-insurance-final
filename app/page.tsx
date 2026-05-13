@@ -391,7 +391,7 @@ export default function Home() {
           {step === 2 && (
             <>
               <h2 style={{ color: "#0b2f6b" }}>
-                Particulars of Vehicle Insured
+                Particulars of Vehicle Insured (as per Registration or Title of Vehicle)
               </h2>
 
               <div
