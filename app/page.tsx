@@ -125,7 +125,7 @@ export default function Home() {
     "3 Months" | "6 Months" | "9 Months" | "12 Months"
   >("3 Months");
 
-  // Document Uploads
+  // Documents
   const [socialSecurityFile, setSocialSecurityFile] =
     useState<File | null>(null);
   const [driversLicenseFile, setDriversLicenseFile] =
@@ -175,15 +175,33 @@ export default function Home() {
     generatePdf(JSON.stringify(formData), premium.toFixed(2));
   };
 
+  // Validation
+  const isStep1Complete =
+    (((firstName.trim() !== "" && surname.trim() !== "") ||
+      companyName.trim() !== "") &&
+      homeAddress.trim() !== "" &&
+      city.trim() !== "" &&
+      district.trim() !== "" &&
+      telephone.trim() !== "" &&
+      cellular.trim() !== "" &&
+      email.trim() !== "");
+
+  const isStep2Complete =
+    make.trim() !== "" &&
+    model.trim() !== "" &&
+    yearManufactured.trim() !== "" &&
+    vehicleType.trim() !== "" &&
+    registryNo.trim() !== "" &&
+    color.trim() !== "";
+
   const allDocumentsUploaded =
-    !!socialSecurityFile &&
-    !!driversLicenseFile &&
-    !!utilityBillFile &&
-    !!vehicleTitleFile;
+    socialSecurityFile !== null &&
+    driversLicenseFile !== null &&
+    utilityBillFile !== null &&
+    vehicleTitleFile !== null;
 
   return (
     <main>
-      {/* Hero Section */}
       <section
         style={{
           backgroundImage:
@@ -218,7 +236,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Main Form Section */}
       <section
         style={{
           maxWidth: 1200,
@@ -234,7 +251,6 @@ export default function Home() {
             padding: 32,
           }}
         >
-          {/* Step Indicator */}
           <div
             style={{
               display: "flex",
@@ -282,7 +298,7 @@ export default function Home() {
                   onChange={setFirstName}
                 />
                 <Field
-                  label="Middle Name"
+                  label="Middle Name (Optional)"
                   value={middleName}
                   onChange={setMiddleName}
                 />
@@ -295,7 +311,7 @@ export default function Home() {
 
               <div style={{ marginTop: 16 }}>
                 <Field
-                  label="Company Name (Optional for Businesses)"
+                  label="Company Name (Alternative to First Name and Surname)"
                   value={companyName}
                   onChange={setCompanyName}
                 />
@@ -345,10 +361,28 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  style={primaryButtonStyle}
+                  disabled={!isStep1Complete}
+                  style={{
+                    ...primaryButtonStyle,
+                    opacity: isStep1Complete ? 1 : 0.5,
+                    cursor: isStep1Complete ? "pointer" : "not-allowed",
+                  }}
                 >
                   Next
                 </button>
+
+                {!isStep1Complete && (
+                  <p
+                    style={{
+                      marginTop: 12,
+                      color: "#b45309",
+                      fontSize: 14,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Please complete all required fields before proceeding.
+                  </p>
+                )}
               </div>
             </>
           )}
@@ -385,7 +419,7 @@ export default function Home() {
                   onChange={setRegistryNo}
                 />
                 <Field
-                  label="License Plate Number"
+                  label="License Plate Number (Optional)"
                   value={licensePlate}
                   onChange={setLicensePlate}
                 />
@@ -452,6 +486,7 @@ export default function Home() {
                   marginTop: 30,
                   display: "flex",
                   gap: 12,
+                  alignItems: "flex-start",
                 }}
               >
                 <button
@@ -461,13 +496,35 @@ export default function Home() {
                 >
                   Back
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setStep(3)}
-                  style={primaryButtonStyle}
-                >
-                  Next
-                </button>
+
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setStep(3)}
+                    disabled={!isStep2Complete}
+                    style={{
+                      ...primaryButtonStyle,
+                      opacity: isStep2Complete ? 1 : 0.5,
+                      cursor: isStep2Complete ? "pointer" : "not-allowed",
+                    }}
+                  >
+                    Next
+                  </button>
+
+                  {!isStep2Complete && (
+                    <p
+                      style={{
+                        marginTop: 12,
+                        color: "#b45309",
+                        fontSize: 14,
+                        fontWeight: 500,
+                        maxWidth: 320,
+                      }}
+                    >
+                      Please complete all required fields before proceeding.
+                    </p>
+                  )}
+                </div>
               </div>
             </>
           )}
@@ -500,7 +557,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Upload Required Documents */}
               <div
                 style={{
                   border: "1px solid #d9d9d9",
@@ -510,9 +566,7 @@ export default function Home() {
                   marginBottom: 30,
                 }}
               >
-                <h3 style={{ marginBottom: 20 }}>
-                  Upload Required Documents
-                </h3>
+                <h3 style={{ marginBottom: 20 }}>Upload Required Documents</h3>
 
                 <div
                   style={{
@@ -607,25 +661,39 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Proceed to Payment */}
               {!showPayment && (
-                <button
-                  type="button"
-                  onClick={() => setShowPayment(true)}
-                  disabled={!allDocumentsUploaded}
-                  style={{
-                    ...primaryButtonStyle,
-                    opacity: allDocumentsUploaded ? 1 : 0.5,
-                    cursor: allDocumentsUploaded
-                      ? "pointer"
-                      : "not-allowed",
-                  }}
-                >
-                  Proceed to Payment
-                </button>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPayment(true)}
+                    disabled={!allDocumentsUploaded}
+                    style={{
+                      ...primaryButtonStyle,
+                      opacity: allDocumentsUploaded ? 1 : 0.5,
+                      cursor: allDocumentsUploaded
+                        ? "pointer"
+                        : "not-allowed",
+                    }}
+                  >
+                    Proceed to Payment
+                  </button>
+
+                  {!allDocumentsUploaded && (
+                    <p
+                      style={{
+                        marginTop: 12,
+                        color: "#b45309",
+                        fontSize: 14,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Please upload all required documents before proceeding to
+                      payment.
+                    </p>
+                  )}
+                </div>
               )}
 
-              {/* Payment Section */}
               {showPayment && (
                 <div
                   style={{
@@ -636,9 +704,7 @@ export default function Home() {
                     background: "#fafafa",
                   }}
                 >
-                  <h3 style={{ marginBottom: 20 }}>
-                    Payment Instructions
-                  </h3>
+                  <h3 style={{ marginBottom: 20 }}>Payment Instructions</h3>
 
                   <div
                     style={{
@@ -675,10 +741,7 @@ export default function Home() {
                   </p>
 
                   <h4>Enter Payment Confirmation Code</h4>
-                  <p>
-                    Please enter the 5-digit payment confirmation
-                    number.
-                  </p>
+                  <p>Please enter the 5-digit payment confirmation number.</p>
 
                   <div
                     style={{
@@ -695,10 +758,7 @@ export default function Home() {
                         maxLength={1}
                         value={paymentCode[i] || ""}
                         onChange={(e) => {
-                          const value = e.target.value.replace(
-                            /\D/g,
-                            ""
-                          );
+                          const value = e.target.value.replace(/\D/g, "");
                           const updated = [...paymentCode];
                           updated[i] = value;
                           setPaymentCode(updated);
