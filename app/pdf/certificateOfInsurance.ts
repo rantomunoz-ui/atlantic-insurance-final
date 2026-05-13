@@ -66,11 +66,20 @@ export async function generateCertificateOfInsurance(
   // ===========================================================================
   // Uses /public/logo.png
   try {
-    doc.addImage("/logo.png", "PNG", margin + 5, 6, 45, 16);
+    doc.addImage("/logo.png", "PNG", margin + 4, 6, 52, 20);
   } catch {
     // If logo cannot be loaded, continue without it.
   }
 
+// ===========================================================================
+// COUNTRY TITLE
+// ===========================================================================
+doc.setFont("helvetica", "bold");
+doc.setFontSize(14);
+doc.text("BELIZE", pageWidth / 2, 6, {
+  align: "center",
+});
+ 
   // ===========================================================================
   // HEADER
   // ===========================================================================
@@ -79,7 +88,7 @@ export async function generateCertificateOfInsurance(
   doc.text(
     "MOTOR VEHICLE INSURANCE (THIRD PARTY RISKS) ACT, 2000",
     pageWidth / 2,
-    20,
+    18,
     { align: "center" }
   );
 
