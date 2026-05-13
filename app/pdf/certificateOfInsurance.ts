@@ -66,7 +66,7 @@ export async function generateCertificateOfInsurance(
   // ===========================================================================
   // Uses /public/logo.png
   try {
-    doc.addImage("/logo.png", "PNG", margin + 4, 6, 52, 20);
+    doc.addImage("/logo.png", "PNG", margin + 2, 6, 52, 20);
   } catch {
     // If logo cannot be loaded, continue without it.
   }
