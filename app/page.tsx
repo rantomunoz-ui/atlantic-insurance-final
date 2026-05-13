@@ -83,7 +83,14 @@ export default function Home() {
     rates[cylinders as keyof typeof rates][
       coverage as keyof (typeof rates)["4"]
     ];
-
+const codeBoxStyle = {
+  width: 55,
+  height: 55,
+  textAlign: "center" as const,
+  fontSize: 24,
+  border: "1px solid #ccc",
+  borderRadius: 8,
+};
   return (
     <main>
       <section
