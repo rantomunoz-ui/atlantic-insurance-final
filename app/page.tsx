@@ -100,20 +100,20 @@ export default function Home() {
           <Image
             src="/logo.png"
             alt="Atlantic Insurance"
-            width={520}
-            height={140}
+            width={320}
+            height={90}
             style={{
               background: "white",
-              padding: 18,
-              borderRadius: 16,
+              padding: 10,
+              borderRadius: 12,
             }}
           />
 
-          <h1 style={{ fontSize: 54, marginTop: 40 }}>
+          <h1 style={{ fontSize: 36, marginTop: 20 }}>
             Buy Your Motor Insurance Online
           </h1>
 
-          <p style={{ fontSize: 22, maxWidth: 760 }}>
+          <p style={{ fontSize: 16, maxWidth: 760 }}>
             Complete your application, upload your documents, calculate your
             premium and proceed to payment.
           </p>
@@ -123,7 +123,7 @@ export default function Home() {
       <section
         style={{
           maxWidth: 1200,
-          margin: "-40px auto 40px",
+          margin: "-20px auto 40px",
           padding: "0 24px",
         }}
       >
