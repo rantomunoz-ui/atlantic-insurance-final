@@ -260,157 +260,149 @@ export default function Home() {
             </>
           )}
 
-          {step === 3 && (
-            <>
-              <h2 style={{ color: "#0b2f6b" }}>
-                Documents, Premium & Payment
-              </h2>
+          // Replace your entire {step === 3 && ( ... )} section with this:
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "2fr 1fr",
-                  gap: 24,
-                  marginBottom: 24,
-                }}
-              >
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      marginBottom: 6,
-                    }}
-                  >
-                    Coverage Period
-                  </label>
+{step === 3 && (
+  <div>
+    <h2 style={{ fontSize: 24, marginBottom: 20 }}>
+      Documents, Premium & Payment
+    </h2>
 
-                  <select
-                    value={coverage}
-                    onChange={(e) => setCoverage(e.target.value)}
-                    style={inputStyle}
-                  >
-                    <option>3 Months</option>
-                    <option>6 Months</option>
-                    <option>9 Months</option>
-                    <option>12 Months</option>
-                  </select>
-                </div>
+    {/* Premium Box */}
+    <div
+      style={{
+        background: "#eef8ef",
+        border: "1px solid #b8e0b8",
+        borderRadius: 16,
+        padding: 24,
+        marginBottom: 30,
+      }}
+    >
+      <div style={{ fontSize: 14, marginBottom: 8 }}>Premium</div>
+      <div
+        style={{
+          fontSize: 48,
+          fontWeight: "bold",
+          color: "#1d6f2c",
+        }}
+      >
+        BZD {Number(premium).toFixed(2)}
+      </div>
+    </div>
 
-                <div
-                  style={{
-                    background: "#f0fdf4",
-                    border: "1px solid #bbf7d0",
-                    borderRadius: 12,
-                    padding: 20,
-                  }}
-                >
-                  <div style={{ fontSize: 13, color: "#166534" }}>
-                    Premium
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 38,
-                      fontWeight: 700,
-                      color: "#15803d",
-                      marginTop: 8,
-                    }}
-                  >
-                    BZD {premium.toFixed(2)}
-                  </div>
-                </div>
-              </div>
+    {/* Proceed to Payment Button */}
+    {!showPayment && (
+      <button
+        type="button"
+        onClick={() => setShowPayment(true)}
+        style={primaryButtonStyle}
+      >
+        Proceed to Payment
+      </button>
+    )}
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 10,
-                }}
-              >
-                {[
-                  "Client Data Form",
-                  "Proposal Form",
-                  "Policy Schedule",
-                  "Certificate of Insurance",
-                ].map((doc) => (
-                  <button
-                    key={doc}
-                    onClick={() =>
-                      generatePdf(doc, {
-                        firstName,
-                        middleName,
-                        surname,
-                        companyName,
-                        homeAddress,
-                        city,
-                        district,
-                        telephone,
-                        cellular,
-                        email,
-                        make,
-                        model,
-                        yearManufactured,
-                        type: vehicleType,
-                        registryNo,
-                        licensePlate,
-                        color,
-                        cylinders,
-                        coverage,
-                        premium,
-                      })
-                    }
-                    style={{
-                      padding: "12px",
-                      borderRadius: 8,
-                      border: "1px solid #cbd5e1",
-                      background: "white",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Print {doc}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+    {/* Payment Section */}
+    {showPayment && (
+      <div
+        style={{
+          marginTop: 30,
+          padding: 30,
+          border: "1px solid #d9d9d9",
+          borderRadius: 16,
+          background: "#fafafa",
+        }}
+      >
+        <h3 style={{ marginBottom: 20 }}>Payment Instructions</h3>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 32,
-            }}
-          >
-            <button
-              onClick={() => setStep(Math.max(1, step - 1))}
-              disabled={step === 1}
-              style={{
-                padding: "12px 24px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            >
-              Back
-            </button>
-
-            <button
-              onClick={() => setStep(Math.min(3, step + 1))}
-              style={{
-                padding: "12px 24px",
-                borderRadius: 8,
-                border: "none",
-                background: "#22c55e",
-                color: "white",
-                fontWeight: 700,
-              }}
-            >
-              {step === 3 ? "Submit Application" : "Next"}
-            </button>
-          </div>
+        {/* QR Code */}
+        <div style={{ textAlign: "center", marginBottom: 20 }}>
+          <img
+            src="/payment-qr.png"
+            alt="Payment QR Code"
+            style={{ width: 220, height: 220 }}
+          />
         </div>
-      </section>
-    </main>
-  );
-}
+
+        {/* Payment Link */}
+        <p style={{ textAlign: "center", marginBottom: 30 }}>
+          Or pay online at:
+          <br />
+          <a
+            href="https://your-payment-link.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://your-payment-link.com
+          </a>
+        </p>
+
+        {/* Confirmation Code */}
+        <h4>Enter Payment Confirmation Code</h4>
+        <p>Please enter the 6-digit payment confirmation number.</p>
+
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            justifyContent: "center",
+            margin: "20px 0 30px",
+          }}
+        >
+          {[0, 1, 2, 3].map((i) => (
+            <input
+              key={i}
+              type="text"
+              maxLength={1}
+              value={paymentCode[i] || ""}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+                const updated = [...paymentCode];
+                updated[i] = value;
+                setPaymentCode(updated);
+              }}
+              style={codeBoxStyle}
+            />
+          ))}
+
+          <input
+            type="text"
+            maxLength={2}
+            value={paymentCode[4] || ""}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              const updated = [...paymentCode];
+              updated[4] = value;
+              setPaymentCode(updated);
+            }}
+            style={{
+              ...codeBoxStyle,
+              width: 80,
+            }}
+          />
+        </div>
+
+        {/* Print Certificate Button */}
+        {paymentCode.join("").length === 6 && (
+          <button
+            type="button"
+            onClick={() => generateCertificateOfInsurance(formData)}
+            style={primaryButtonStyle}
+          >
+            Print Certificate of Insurance
+          </button>
+        )}
+      </div>
+    )}
+
+    {/* Back Button */}
+    <div style={{ marginTop: 30 }}>
+      <button
+        type="button"
+        onClick={() => setStep(2)}
+        style={secondaryButtonStyle}
+      >
+        Back
+      </button>
+    </div>
+  </div>
+)}
