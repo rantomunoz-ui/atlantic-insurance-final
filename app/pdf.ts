@@ -37,7 +37,9 @@ switch (formData.coverage) {
     expiryDate.setMonth(expiryDate.getMonth() + 3);
     break;
 }
+expiryDate.setDate(expiryDate.getDate() - 1);
 
+  
   // Generate certificate
   await generateCertificateOfInsurance({
     certificateNumber: `ONLINE-${Math.floor(10000 + Math.random() * 90000)}`,
