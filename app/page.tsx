@@ -162,8 +162,8 @@ export default function Home() {
   };
 
   const handleGenerateCertificate = () => {
-    generatePdf(formData);
-  };
+  generatePdf(formData, premium);
+};
 
   return (
     <main>
