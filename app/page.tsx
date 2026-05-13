@@ -161,8 +161,8 @@ export default function Home() {
     paymentCode: paymentCode.join(""),
   };
 
-  const handleGenerateCertificate = () => {
-  generatePdf(formData, premium);
+ const handleGenerateCertificate = () => {
+  generatePdf();
 };
 
   return (
