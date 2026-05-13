@@ -162,7 +162,7 @@ export default function Home() {
   };
 
  const handleGenerateCertificate = () => {
-  generatePdf();
+  generatePdf(formData, premium.toFixed(2));
 };
 
   return (
