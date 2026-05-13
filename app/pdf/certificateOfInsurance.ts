@@ -16,6 +16,7 @@ export interface CertificateData {
   premium?: string;
   paymentConfirmation?: string;
   coveragePeriod?: string;
+  color?: string;
 }
 
 function formatDate(value: string): string {
@@ -23,6 +24,17 @@ function formatDate(value: string): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+  });
+}
+
+function formatIssuedDateTime(): string {
+  return new Date().toLocaleString("en-BZ", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   });
 }
 
@@ -46,55 +58,69 @@ export async function generateCertificateOfInsurance(
 
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 10;
+  const margin = 8;
   const contentWidth = pageWidth - margin * 2;
 
   // ===========================================================================
-  // QR CODE URL
+  // QR CODE
   // ===========================================================================
   const encodedData = encodeURIComponent(JSON.stringify(data));
   const verificationUrl =
     `https://atlantic-insurance-final.vercel.app/verify?data=${encodedData}`;
 
+  // Higher quality QR code
   const qrDataUrl = await QRCode.toDataURL(verificationUrl, {
-    width: 400,
+    errorCorrectionLevel: "H",
     margin: 1,
+    width: 800,
+    color: {
+      dark: "#000000",
+      light: "#FFFFFF",
+    },
   });
 
   // ===========================================================================
   // LOGO
   // ===========================================================================
-  // Uses /public/logo.png
   try {
-    doc.addImage("/logo.png", "PNG", margin + 1, 4, 52, 20);
+    // Move further left and make slightly larger
+    doc.addImage("/logo.png", "PNG", 1, 4, 46, 18);
   } catch {
-    // If logo cannot be loaded, continue without it.
+    // Continue without logo if not found
   }
 
-// ===========================================================================
-// COUNTRY TITLE
-// ===========================================================================
-doc.setFont("helvetica", "bold");
-doc.setFontSize(14);
-doc.text("BELIZE", pageWidth / 2, 10, {
-  align: "center",
-});
- 
+  // ===========================================================================
+  // QR CODE TOP RIGHT
+  // ===========================================================================
+  const qrSize = 26;
+  doc.addImage(
+    qrDataUrl,
+    "PNG",
+    pageWidth - qrSize - 6,
+    4,
+    qrSize,
+    qrSize
+  );
+
   // ===========================================================================
   // HEADER
   // ===========================================================================
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("BELIZE", pageWidth / 2, 8, { align: "center" });
+
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   doc.text(
     "MOTOR VEHICLE INSURANCE (THIRD PARTY RISKS) ACT, 2000",
     pageWidth / 2,
-    18,
+    15,
     { align: "center" }
   );
 
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", pageWidth / 2, 24, {
+  doc.setFontSize(16);
+  doc.text("CERTIFICATE OF INSURANCE", pageWidth / 2, 23, {
     align: "center",
   });
 
@@ -103,41 +129,56 @@ doc.text("BELIZE", pageWidth / 2, 10, {
   doc.text(
     `Certificate Number: ${data.certificateNumber}`,
     margin,
-    38
+    34
   );
+
+  // Base font size for sections 1–8
+  const sectionTitleSize = 10;
+  const bodyFontSize = 8;
 
   // ===========================================================================
   // BOX 1–4
   // ===========================================================================
-  let y = 44;
+  let y = 40;
 
   doc.rect(margin, y, contentWidth, 22);
 
-  // Vertical center line
-  doc.line(margin + contentWidth / 2, y, margin + contentWidth / 2, y + 22);
-
-  // Horizontal center line
+  // Dividing lines
+  doc.line(
+    margin + contentWidth / 2,
+    y,
+    margin + contentWidth / 2,
+    y + 22
+  );
   doc.line(margin, y + 11, margin + contentWidth, y + 11);
 
-  // 1
+  // Section 1
   doc.setFont("helvetica", "bold");
+  doc.setFontSize(sectionTitleSize);
   doc.text("1. Name of Policyholder:", margin + 3, y + 6);
-  doc.setFont("helvetica", "normal");
-  doc.text(data.policyholderName, margin + 48, y + 6);
 
-  // 2
+  doc.setFont("helvetica", "normal");
+  doc.text(data.policyholderName || "", margin + 48, y + 6);
+
+  // Section 2
   doc.setFont("helvetica", "bold");
-  doc.text("2. Policy No.:", margin + contentWidth / 2 + 3, y + 6);
+  doc.text(
+    "2. Policy No.:",
+    margin + contentWidth / 2 + 3,
+    y + 6
+  );
+
   doc.setFont("helvetica", "normal");
   doc.text(
-    data.policyNumber,
+    data.policyNumber || "",
     margin + contentWidth / 2 + 35,
     y + 6
   );
 
-  // 3
+  // Section 3
   doc.setFont("helvetica", "bold");
   doc.text("3. Date of Insured:", margin + 3, y + 17);
+
   doc.setFont("helvetica", "normal");
   doc.text(
     formatDate(data.commencementDate),
@@ -145,13 +186,14 @@ doc.text("BELIZE", pageWidth / 2, 10, {
     y + 17
   );
 
-  // 4
+  // Section 4
   doc.setFont("helvetica", "bold");
   doc.text(
     "4. Expiration Date:",
     margin + contentWidth / 2 + 3,
     y + 17
   );
+
   doc.setFont("helvetica", "normal");
   doc.text(
     formatDate(data.expiryDate),
@@ -160,68 +202,85 @@ doc.text("BELIZE", pageWidth / 2, 10, {
   );
 
   // ===========================================================================
-  // BOX 5
+  // SECTION 4 - VEHICLE(S) COVERED
   // ===========================================================================
   y += 22;
-  doc.rect(margin, y, contentWidth, 40);
+  doc.rect(margin, y, contentWidth, 24); // Reduced height
 
   doc.setFont("helvetica", "bold");
-  doc.text("4. Vehicle(s) Covered", margin + 2, y + 6);
+  doc.setFontSize(sectionTitleSize);
+  doc.text("4. Vehicle(s) Covered", margin + 3, y + 5);
 
   doc.setFont("helvetica", "normal");
-  doc.text("Make & Model:", margin + 5, y + 14);
-  doc.text(data.makeModel, margin + 35, y + 14);
+  doc.setFontSize(bodyFontSize);
 
-  doc.text("VIN#:", margin + 95, y + 14);
-  doc.text(data.vin, margin + 110, y + 14);
+  // Compact rows
+  const row1 = y + 11;
+  const row2 = y + 16;
+  const row3 = y + 21;
 
-  doc.text("Year:", margin + 5, y + 22);
-  doc.text(data.yearManufactured, margin + 35, y + 22);
+  // Left column
+  doc.text("Make & Model:", margin + 5, row1);
+  doc.text(data.makeModel || "", margin + 35, row1);
 
-  doc.text("License Plate No.:", margin + 95, y + 22);
-  doc.text(data.licensePlate || "N/A", margin + 130, y + 22);
+  doc.text("Year:", margin + 5, row2);
+  doc.text(data.yearManufactured || "", margin + 35, row2);
 
-  doc.text("Type of Vehicle:", margin + 5, y + 30);
-  doc.text(data.vehicleType, margin + 35, y + 30);
+  doc.text("Type of Vehicle:", margin + 5, row3);
+  doc.text(data.vehicleType || "", margin + 35, row3);
 
-  doc.text("Color:", margin + 95, y + 30);
-  doc.text("", margin + 110, y + 30);
+  // Right column
+  doc.text("VIN#:", margin + 95, row1);
+  doc.text(data.vin || "", margin + 110, row1);
+
+  doc.text("License Plate No.:", margin + 95, row2);
+  doc.text(data.licensePlate || "N/A", margin + 130, row2);
+
+  doc.text("Color:", margin + 95, row3);
+  doc.text(data.color || "", margin + 110, row3);
 
   // ===========================================================================
-  // BOX 5 TYPE OF COVERAGE
+  // SECTION 5 - TYPE OF COVERAGE
   // ===========================================================================
-  y += 40;
-  doc.rect(margin, y, contentWidth, 20);
+  y += 24; // Exactly the height of Section 4 (no gap)
+  doc.rect(margin, y, contentWidth, 16);
 
   doc.setFont("helvetica", "bold");
-  doc.text("5. Type of Coverage:", margin + 3, y + 7);
+  doc.setFontSize(sectionTitleSize);
+  doc.text("5. Type of Coverage:", margin + 3, y + 6);
 
   doc.setFont("helvetica", "normal");
-  doc.text(data.coverageType, margin + 55, y + 7);
+  doc.setFontSize(bodyFontSize);
+  doc.text(
+    data.coverageType || "THIRD PARTY ACT",
+    margin + 55,
+    y + 6
+  );
 
   doc.text(
     `Coverage Period: ${data.coveragePeriod || "3 Months"}`,
     margin + 3,
-    y + 15
+    y + 13
   );
 
   doc.text(
     `Premium: BZD ${data.premium || "0.00"}`,
     margin + 100,
-    y + 15
+    y + 13
   );
 
   // ===========================================================================
-  // BOX 6 LIMITS OF LIABILITY
+  // SECTION 6 - LIMITS OF LIABILITY
   // ===========================================================================
-  y += 26;
-  doc.rect(margin, y, contentWidth, 26);
+  y += 16; // Exactly the height of Section 5 (no gap)
+  doc.rect(margin, y, contentWidth, 30);
 
   doc.setFont("helvetica", "bold");
+  doc.setFontSize(sectionTitleSize);
   doc.text("6. Limits of Liability", margin + 3, y + 6);
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
+  doc.setFontSize(bodyFontSize);
 
   doc.text(
     "i. Liability for death or bodily injury BZ$ 50,000.00 in respect of any one claim by any one person.",
@@ -232,23 +291,23 @@ doc.text("BELIZE", pageWidth / 2, 10, {
   doc.text(
     "ii. Liability for death or bodily injury BZ$ 200,000.00 in respect of the total claims arising from any one accident.",
     margin + 6,
-    y + 17
+    y + 18
   );
 
   doc.text(
     "iii. Liability of BZ$ 20,000.00 for damage to any property arising from one accident.",
     margin + 6,
-    y + 22
+    y + 24
   );
 
   // ===========================================================================
-  // BOX 7 PERSONS ENTITLED TO DRIVE
+  // SECTION 7 - PERSONS ENTITLED TO DRIVE
   // ===========================================================================
-  y += 26;
+  y += 30;
   doc.rect(margin, y, contentWidth, 58);
 
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(10);
+  doc.setFontSize(sectionTitleSize);
   doc.text(
     "7. Persons or Classes of Person Entitled to Drive",
     margin + 3,
@@ -256,7 +315,7 @@ doc.text("BELIZE", pageWidth / 2, 10, {
   );
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
+  doc.setFontSize(bodyFontSize);
 
   let textY = y + 12;
 
@@ -289,7 +348,7 @@ doc.text("BELIZE", pageWidth / 2, 10, {
     textY
   );
 
-  textY += 8;
+  // Align F with C
   drawWrappedText(
     doc,
     "F  Any person in the policyholder's employ whilst the vehicle is being used for the Policyholder's business.",
@@ -300,17 +359,17 @@ doc.text("BELIZE", pageWidth / 2, 10, {
   );
 
   // ===========================================================================
-  // BOX 8 LIMITATION AS TO USE
+  // SECTION 8 - LIMITATION AS TO USE
   // ===========================================================================
   y += 58;
   doc.rect(margin, y, contentWidth, 42);
 
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(10);
+  doc.setFontSize(sectionTitleSize);
   doc.text("8. Limitation as to Use", margin + 3, y + 6);
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
+  doc.setFontSize(bodyFontSize);
 
   let useY = y + 12;
 
@@ -348,13 +407,20 @@ doc.text("BELIZE", pageWidth / 2, 10, {
   y += 42;
 
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(10);
-  doc.text("EXCLUSIONS", pageWidth / 2, y + 6, { align: "center" });
+  doc.setFontSize(sectionTitleSize);
+  doc.text("EXCLUSIONS", pageWidth / 2, y + 6, {
+    align: "center",
+  });
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
+  doc.setFontSize(bodyFontSize);
 
-  doc.text("L  Conveyance of passengers for hire or reward.", margin + 6, y + 12);
+  doc.text(
+    "L  Conveyance of passengers for hire or reward.",
+    margin + 6,
+    y + 12
+  );
+
   doc.text(
     "O  Use whilst drawing a trailer except where permitted.",
     margin + 100,
@@ -373,38 +439,36 @@ doc.text("BELIZE", pageWidth / 2, 10, {
     y + 18
   );
 
-  doc.text("N  Use for hire or reward.", margin + 6, y + 24);
-
-  // ===========================================================================
-  // FOOTER CERTIFICATION
-  // ===========================================================================
-  y += 34;
-
-  doc.setFontSize(8);
-  drawWrappedText(
-    doc,
-    "We hereby certify that a Policy of Insurance required by the Motor Vehicle Insurance (Third Party Risks) Act, 2000 has been issued.",
-    margin,
-    y,
-    120,
-    4
+  doc.text(
+    "N  Use for hire or reward.",
+    margin + 6,
+    y + 24
   );
 
   // ===========================================================================
-  // QR CODE
+  // FOOTER
   // ===========================================================================
-  const qrSize = 24;
-  doc.addImage(
-    qrDataUrl,
-    "PNG",
-    pageWidth - margin - qrSize - 2,
-    pageHeight - 40,
-    qrSize,
-    qrSize
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+
+  doc.text(
+    "This Certificate of Insurance is valid for 24 hours from time issued.",
+    margin,
+    pageHeight - 8
+  );
+
+  doc.setFont("helvetica", "normal");
+  doc.text(
+    `Issued on: ${formatIssuedDateTime()}`,
+    pageWidth - margin,
+    pageHeight - 8,
+    { align: "right" }
   );
 
   // ===========================================================================
   // SAVE
   // ===========================================================================
-  doc.save(`Certificate_of_Insurance_${data.certificateNumber}.pdf`);
+  doc.save(
+    `Certificate_of_Insurance_${data.certificateNumber}.pdf`
+  );
 }
