@@ -283,7 +283,7 @@ export default function Home() {
           {/* STEP 1 */}
           {step === 1 && (
             <>
-              <h2 style={{ color: "#0b2f6b" }}>Identification of Applicant</h2>
+              <h2 style={{ color: "#0b2f6b" }}>Identification of Applicant (as per Social Security or Passport)</h2>
 
               <div
                 style={{
