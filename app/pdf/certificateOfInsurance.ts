@@ -295,7 +295,7 @@ export async function generateCertificateOfInsurance(
   );
 
   doc.text(
-    "iii. Liability of BZ$ 20,000.00 for damage to any property arising from one accident.",
+    "iii. Liability of BZ$ 120,000.00 for damage to any property arising from one accident.",
     margin + 6,
     y + 24
   );
