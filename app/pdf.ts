@@ -13,7 +13,10 @@ export async function generatePdf(data: string, premium: string) {
 
   // Policy dates
   const commencementDate = new Date();
-  switch (formData.coverage) {
+const expiryDate = new Date();
+
+// Calculate expiry date based on selected coverage period
+switch (formData.coverage) {
   case "3 Months":
     expiryDate.setMonth(expiryDate.getMonth() + 3);
     break;
