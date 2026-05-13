@@ -84,7 +84,7 @@ export async function generateCertificateOfInsurance(
   // ===========================================================================
   try {
     // Move further left and make slightly larger
-    doc.addImage("/logo.png", "PNG", 1, 4, 46, 18);
+    doc.addImage("/logo.png", "PNG", 1, 4, 52, 22);
   } catch {
     // Continue without logo if not found
   }
