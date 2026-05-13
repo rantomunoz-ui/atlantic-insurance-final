@@ -57,7 +57,7 @@ expiryDate.setDate(expiryDate.getDate() - 1);
     licensePlate: formData.licensePlate || "",
 
     coverageType:
-      "THIRD PART ACT",
+      "THIRD PARTY ACT PLUS - PRIVATE",
 
     premium,
     paymentConfirmation: formData.paymentCode || "",
