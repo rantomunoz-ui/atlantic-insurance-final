@@ -5,9 +5,24 @@ import Image from "next/image";
 import { generatePdf } from "./pdf";
 
 const rates = {
-  "4": { "3 Months": 200, "6 Months": 450, "9 Months": 300, "12 Months": 500 },
-  "6": { "3 Months": 210, "6 Months": 460, "9 Months": 310, "12 Months": 520 },
-  "8": { "3 Months": 220, "6 Months": 470, "9 Months": 320, "12 Months": 540 },
+  "4": {
+    "3 Months": 200,
+    "6 Months": 450,
+    "9 Months": 300,
+    "12 Months": 500,
+  },
+  "6": {
+    "3 Months": 210,
+    "6 Months": 460,
+    "9 Months": 310,
+    "12 Months": 520,
+  },
+  "8": {
+    "3 Months": 220,
+    "6 Months": 470,
+    "9 Months": 320,
+    "12 Months": 540,
+  },
 };
 
 const inputStyle: React.CSSProperties = {
@@ -16,6 +31,35 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 8,
   border: "1px solid #d0d7e2",
   boxSizing: "border-box",
+};
+
+const primaryButtonStyle: React.CSSProperties = {
+  background: "#0b2f6b",
+  color: "white",
+  border: "none",
+  padding: "12px 24px",
+  borderRadius: 8,
+  cursor: "pointer",
+  fontWeight: 600,
+};
+
+const secondaryButtonStyle: React.CSSProperties = {
+  background: "#eaf0fb",
+  color: "#0b2f6b",
+  border: "none",
+  padding: "12px 24px",
+  borderRadius: 8,
+  cursor: "pointer",
+  fontWeight: 600,
+};
+
+const codeBoxStyle: React.CSSProperties = {
+  width: 55,
+  height: 55,
+  textAlign: "center",
+  fontSize: 24,
+  border: "1px solid #ccc",
+  borderRadius: 8,
 };
 
 function Field({
@@ -76,23 +120,54 @@ export default function Home() {
   const [color, setColor] = useState("");
 
   // Policy Information
-  const [cylinders, setCylinders] = useState("4");
-  const [coverage, setCoverage] = useState("3 Months");
+  const [cylinders, setCylinders] = useState<"4" | "6" | "8">("4");
+  const [coverage, setCoverage] = useState<
+    "3 Months" | "6 Months" | "9 Months" | "12 Months"
+  >("3 Months");
 
-  const premium =
-    rates[cylinders as keyof typeof rates][
-      coverage as keyof (typeof rates)["4"]
-    ];
-const codeBoxStyle = {
-  width: 55,
-  height: 55,
-  textAlign: "center",
-  fontSize: 24,
-  border: "1px solid #ccc",
-  borderRadius: 8,
-};
+  // Payment
+  const [showPayment, setShowPayment] = useState(false);
+  const [paymentCode, setPaymentCode] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  const premium = rates[cylinders][coverage];
+
+  const formData = {
+    firstName,
+    middleName,
+    surname,
+    companyName,
+    homeAddress,
+    city,
+    district,
+    telephone,
+    cellular,
+    email,
+    make,
+    model,
+    yearManufactured,
+    vehicleType,
+    registryNo,
+    licensePlate,
+    color,
+    cylinders,
+    coverage,
+    premium,
+    paymentCode: paymentCode.join(""),
+  };
+
+  const handleGenerateCertificate = () => {
+    generatePdf(formData);
+  };
+
   return (
     <main>
+      {/* Hero Section */}
       <section
         style={{
           backgroundImage:
@@ -127,6 +202,7 @@ const codeBoxStyle = {
         </div>
       </section>
 
+      {/* Main Form Section */}
       <section
         style={{
           maxWidth: 1200,
@@ -142,6 +218,7 @@ const codeBoxStyle = {
             padding: 32,
           }}
         >
+          {/* Steps */}
           <div
             style={{
               display: "flex",
@@ -171,6 +248,7 @@ const codeBoxStyle = {
             ))}
           </div>
 
+          {/* STEP 1 */}
           {step === 1 && (
             <>
               <h2 style={{ color: "#0b2f6b" }}>Identification of Applicant</h2>
@@ -182,9 +260,21 @@ const codeBoxStyle = {
                   gap: 16,
                 }}
               >
-                <Field label="First Name" value={firstName} onChange={setFirstName} />
-                <Field label="Middle Name" value={middleName} onChange={setMiddleName} />
-                <Field label="Surname" value={surname} onChange={setSurname} />
+                <Field
+                  label="First Name"
+                  value={firstName}
+                  onChange={setFirstName}
+                />
+                <Field
+                  label="Middle Name"
+                  value={middleName}
+                  onChange={setMiddleName}
+                />
+                <Field
+                  label="Surname"
+                  value={surname}
+                  onChange={setSurname}
+                />
               </div>
 
               <div style={{ marginTop: 16 }}>
@@ -203,16 +293,47 @@ const codeBoxStyle = {
                   marginTop: 16,
                 }}
               >
-                <Field label="Home Address" value={homeAddress} onChange={setHomeAddress} />
-                <Field label="City / Town / Village" value={city} onChange={setCity} />
-                <Field label="District" value={district} onChange={setDistrict} />
-                <Field label="Telephone" value={telephone} onChange={setTelephone} />
-                <Field label="Cellular" value={cellular} onChange={setCellular} />
+                <Field
+                  label="Home Address"
+                  value={homeAddress}
+                  onChange={setHomeAddress}
+                />
+                <Field
+                  label="City / Town / Village"
+                  value={city}
+                  onChange={setCity}
+                />
+                <Field
+                  label="District"
+                  value={district}
+                  onChange={setDistrict}
+                />
+                <Field
+                  label="Telephone"
+                  value={telephone}
+                  onChange={setTelephone}
+                />
+                <Field
+                  label="Cellular"
+                  value={cellular}
+                  onChange={setCellular}
+                />
                 <Field label="Email" value={email} onChange={setEmail} />
+              </div>
+
+              <div style={{ marginTop: 30 }}>
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  style={primaryButtonStyle}
+                >
+                  Next
+                </button>
               </div>
             </>
           )}
 
+          {/* STEP 2 */}
           {step === 2 && (
             <>
               <h2 style={{ color: "#0b2f6b" }}>
@@ -233,8 +354,16 @@ const codeBoxStyle = {
                   value={yearManufactured}
                   onChange={setYearManufactured}
                 />
-                <Field label="Type" value={vehicleType} onChange={setVehicleType} />
-                <Field label="Registry No. or VIN" value={registryNo} onChange={setRegistryNo} />
+                <Field
+                  label="Type"
+                  value={vehicleType}
+                  onChange={setVehicleType}
+                />
+                <Field
+                  label="Registry No. or VIN"
+                  value={registryNo}
+                  onChange={setRegistryNo}
+                />
                 <Field
                   label="License Plate Number"
                   value={licensePlate}
@@ -242,6 +371,7 @@ const codeBoxStyle = {
                 />
                 <Field label="Color" value={color} onChange={setColor} />
 
+                {/* Cylinders */}
                 <div>
                   <label
                     style={{
@@ -255,7 +385,9 @@ const codeBoxStyle = {
                   </label>
                   <select
                     value={cylinders}
-                    onChange={(e) => setCylinders(e.target.value)}
+                    onChange={(e) =>
+                      setCylinders(e.target.value as "4" | "6" | "8")
+                    }
                     style={inputStyle}
                   >
                     <option value="4">4 Cylinders</option>
@@ -263,153 +395,209 @@ const codeBoxStyle = {
                     <option value="8">8 Cylinders</option>
                   </select>
                 </div>
+
+                {/* Coverage */}
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Coverage Period
+                  </label>
+                  <select
+                    value={coverage}
+                    onChange={(e) =>
+                      setCoverage(
+                        e.target.value as
+                          | "3 Months"
+                          | "6 Months"
+                          | "9 Months"
+                          | "12 Months"
+                      )
+                    }
+                    style={inputStyle}
+                  >
+                    <option value="3 Months">3 Months</option>
+                    <option value="6 Months">6 Months</option>
+                    <option value="9 Months">9 Months</option>
+                    <option value="12 Months">12 Months</option>
+                  </select>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 30,
+                  display: "flex",
+                  gap: 12,
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  style={secondaryButtonStyle}
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  style={primaryButtonStyle}
+                >
+                  Next
+                </button>
               </div>
             </>
           )}
 
-          // Replace your entire {step === 3 && ( ... )} section with this:
+          {/* STEP 3 */}
+          {step === 3 && (
+            <div>
+              <h2 style={{ fontSize: 24, marginBottom: 20 }}>
+                Documents, Premium & Payment
+              </h2>
 
-{step === 3 && (
-  <div>
-    <h2 style={{ fontSize: 24, marginBottom: 20 }}>
-      Documents, Premium & Payment
-    </h2>
+              {/* Premium Box */}
+              <div
+                style={{
+                  background: "#eef8ef",
+                  border: "1px solid #b8e0b8",
+                  borderRadius: 16,
+                  padding: 24,
+                  marginBottom: 30,
+                }}
+              >
+                <div style={{ fontSize: 14, marginBottom: 8 }}>Premium</div>
+                <div
+                  style={{
+                    fontSize: 48,
+                    fontWeight: "bold",
+                    color: "#1d6f2c",
+                  }}
+                >
+                  BZD {premium.toFixed(2)}
+                </div>
+              </div>
 
-    {/* Premium Box */}
-    <div
-      style={{
-        background: "#eef8ef",
-        border: "1px solid #b8e0b8",
-        borderRadius: 16,
-        padding: 24,
-        marginBottom: 30,
-      }}
-    >
-      <div style={{ fontSize: 14, marginBottom: 8 }}>Premium</div>
-      <div
-        style={{
-          fontSize: 48,
-          fontWeight: "bold",
-          color: "#1d6f2c",
-        }}
-      >
-        BZD {Number(premium).toFixed(2)}
-      </div>
-    </div>
+              {/* Proceed to Payment */}
+              {!showPayment && (
+                <button
+                  type="button"
+                  onClick={() => setShowPayment(true)}
+                  style={primaryButtonStyle}
+                >
+                  Proceed to Payment
+                </button>
+              )}
 
-    {/* Proceed to Payment Button */}
-    {!showPayment && (
-      <button
-        type="button"
-        onClick={() => setShowPayment(true)}
-        style={primaryButtonStyle}
-      >
-        Proceed to Payment
-      </button>
-    )}
+              {/* Payment Section */}
+              {showPayment && (
+                <div
+                  style={{
+                    marginTop: 30,
+                    padding: 30,
+                    border: "1px solid #d9d9d9",
+                    borderRadius: 16,
+                    background: "#fafafa",
+                  }}
+                >
+                  <h3 style={{ marginBottom: 20 }}>Payment Instructions</h3>
 
-    {/* Payment Section */}
-    {showPayment && (
-      <div
-        style={{
-          marginTop: 30,
-          padding: 30,
-          border: "1px solid #d9d9d9",
-          borderRadius: 16,
-          background: "#fafafa",
-        }}
-      >
-        <h3 style={{ marginBottom: 20 }}>Payment Instructions</h3>
+                  <div style={{ textAlign: "center", marginBottom: 20 }}>
+                    <img
+                      src="/payment-qr.png"
+                      alt="Payment QR Code"
+                      style={{ width: 220, height: 220 }}
+                    />
+                  </div>
 
-        {/* QR Code */}
-        <div style={{ textAlign: "center", marginBottom: 20 }}>
-          <img
-            src="/payment-qr.png"
-            alt="Payment QR Code"
-            style={{ width: 220, height: 220 }}
-          />
+                  <p style={{ textAlign: "center", marginBottom: 30 }}>
+                    Or pay online at:
+                    <br />
+                    <a
+                      href="https://your-payment-link.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      https://your-payment-link.com
+                    </a>
+                  </p>
+
+                  <h4>Enter Payment Confirmation Code</h4>
+                  <p>
+                    Please enter the 6-digit payment confirmation number.
+                  </p>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      justifyContent: "center",
+                      margin: "20px 0 30px",
+                    }}
+                  >
+                    {[0, 1, 2, 3].map((i) => (
+                      <input
+                        key={i}
+                        type="text"
+                        maxLength={1}
+                        value={paymentCode[i] || ""}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          const updated = [...paymentCode];
+                          updated[i] = value;
+                          setPaymentCode(updated);
+                        }}
+                        style={codeBoxStyle}
+                      />
+                    ))}
+
+                    <input
+                      type="text"
+                      maxLength={2}
+                      value={paymentCode[4] || ""}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        const updated = [...paymentCode];
+                        updated[4] = value;
+                        setPaymentCode(updated);
+                      }}
+                      style={{
+                        ...codeBoxStyle,
+                        width: 80,
+                      }}
+                    />
+                  </div>
+
+                  {paymentCode.join("").length === 6 && (
+                    <button
+                      type="button"
+                      onClick={handleGenerateCertificate}
+                      style={primaryButtonStyle}
+                    >
+                      Print Certificate of Insurance
+                    </button>
+                  )}
+                </div>
+              )}
+
+              <div style={{ marginTop: 30 }}>
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  style={secondaryButtonStyle}
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* Payment Link */}
-        <p style={{ textAlign: "center", marginBottom: 30 }}>
-          Or pay online at:
-          <br />
-          <a
-            href="https://your-payment-link.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            https://your-payment-link.com
-          </a>
-        </p>
-
-        {/* Confirmation Code */}
-        <h4>Enter Payment Confirmation Code</h4>
-        <p>Please enter the 6-digit payment confirmation number.</p>
-
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            justifyContent: "center",
-            margin: "20px 0 30px",
-          }}
-        >
-          {[0, 1, 2, 3].map((i) => (
-            <input
-              key={i}
-              type="text"
-              maxLength={1}
-              value={paymentCode[i] || ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "");
-                const updated = [...paymentCode];
-                updated[i] = value;
-                setPaymentCode(updated);
-              }}
-              style={codeBoxStyle}
-            />
-          ))}
-
-          <input
-            type="text"
-            maxLength={2}
-            value={paymentCode[4] || ""}
-            onChange={(e) => {
-              const value = e.target.value.replace(/\D/g, "");
-              const updated = [...paymentCode];
-              updated[4] = value;
-              setPaymentCode(updated);
-            }}
-            style={{
-              ...codeBoxStyle,
-              width: 80,
-            }}
-          />
-        </div>
-
-        {/* Print Certificate Button */}
-        {paymentCode.join("").length === 6 && (
-          <button
-            type="button"
-            onClick={() => generateCertificateOfInsurance(formData)}
-            style={primaryButtonStyle}
-          >
-            Print Certificate of Insurance
-          </button>
-        )}
-      </div>
-    )}
-
-    {/* Back Button */}
-    <div style={{ marginTop: 30 }}>
-      <button
-        type="button"
-        onClick={() => setStep(2)}
-        style={secondaryButtonStyle}
-      >
-        Back
-      </button>
-    </div>
-  </div>
-)}
+      </section>
+    </main>
+  );
+}
