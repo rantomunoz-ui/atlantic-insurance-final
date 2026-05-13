@@ -141,15 +141,18 @@ doc.text(`License Plate No.: ${data.licensePlate || ""}`, 100, 92);
 doc.text(`Color: ${data.color || ""}`, 100, 98);
 
 // ===== SECTION 5 =====
-// Move Section 5 down to start immediately after Section 4
 doc.rect(15, 102, 180, 20);
 
-  // ===== SECTION 5 =====
-  doc.rect(15, 108, 180, 20);
-  doc.text("5. Type of Coverage", 17, 114);
-  doc.text(coverageType, 65, 114);
-  doc.text(`Coverage Period: ${data.coverage || ""}`, 17, 121);
-  doc.text(`Premium: BZD ${(data.premium ?? 0).toFixed(2)}`, 110, 121);
+doc.setFont("helvetica", "normal");
+doc.setFontSize(10);
+
+// First row
+doc.text("5. Type of Coverage:", 18, 110);
+doc.text(coverageType, 70, 110);
+
+// Second row
+doc.text(`Coverage Period: ${data.coverage || ""}`, 18, 118);
+doc.text(`Premium: BZD ${(data.premium ?? 0).toFixed(2)}`, 110, 118);
 
   // ===== SECTION 6 =====
   doc.rect(15, 128, 180, 24);
