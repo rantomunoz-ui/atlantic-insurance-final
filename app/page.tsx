@@ -83,7 +83,7 @@ export default function Home() {
     rates[cylinders as keyof typeof rates][
       coverage as keyof (typeof rates)["4"]
     ];
-const codeBoxStyle: React.CSSProperties = {
+const codeBoxStyle = {
   width: 55,
   height: 55,
   textAlign: "center",
