@@ -13,14 +13,33 @@ export async function generatePdf(data: string, premium: string) {
 
   // Policy dates
   const commencementDate = new Date();
-  const expiryDate = new Date();
-  expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+  switch (formData.coverage) {
+  case "3 Months":
+    expiryDate.setMonth(expiryDate.getMonth() + 3);
+    break;
+
+  case "6 Months":
+    expiryDate.setMonth(expiryDate.getMonth() + 6);
+    break;
+
+  case "9 Months":
+    expiryDate.setMonth(expiryDate.getMonth() + 9);
+    break;
+
+  case "12 Months":
+    expiryDate.setMonth(expiryDate.getMonth() + 12);
+    break;
+
+  default:
+    expiryDate.setMonth(expiryDate.getMonth() + 3);
+    break;
+}
 
   // Generate certificate
   await generateCertificateOfInsurance({
-    certificateNumber: `C-${Math.floor(10000 + Math.random() * 90000)}`,
-    policyNumber: `BN.${new Date().getFullYear()}.${Math.floor(
-      1000 + Math.random() * 9000
+    certificateNumber: `ONLINE-${Math.floor(10000 + Math.random() * 90000)}`,
+    policyNumber: `BN.${Math.floor(
+      1000 + Math.random() * 9000.${new Date().getFullYear()}
     )}`,
     policyholderName: insuredName,
     commencementDate: commencementDate.toISOString(),
@@ -33,7 +52,7 @@ export async function generatePdf(data: string, premium: string) {
     licensePlate: formData.licensePlate || "",
 
     coverageType:
-      "COMPREHENSIVE WITH HURRICANE, PASSENGER LIABILITY",
+      "THIRD PART ACT",
 
     premium,
     paymentConfirmation: formData.paymentCode || "",
