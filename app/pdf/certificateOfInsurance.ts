@@ -66,7 +66,7 @@ export async function generateCertificateOfInsurance(
   // ===========================================================================
   // Uses /public/logo.png
   try {
-    doc.addImage("/logo.png", "PNG", margin + 2, 6, 52, 20);
+    doc.addImage("/logo.png", "PNG", margin + 2, 4, 52, 20);
   } catch {
     // If logo cannot be loaded, continue without it.
   }
@@ -76,7 +76,7 @@ export async function generateCertificateOfInsurance(
 // ===========================================================================
 doc.setFont("helvetica", "bold");
 doc.setFontSize(14);
-doc.text("BELIZE", pageWidth / 2, 6, {
+doc.text("BELIZE", pageWidth / 2, 10, {
   align: "center",
 });
  
@@ -94,7 +94,7 @@ doc.text("BELIZE", pageWidth / 2, 6, {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text("CERTIFICATE OF INSURANCE", pageWidth / 2, 28, {
+  doc.text("CERTIFICATE OF INSURANCE", pageWidth / 2, 24, {
     align: "center",
   });
 
