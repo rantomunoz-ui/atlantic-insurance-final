@@ -122,15 +122,27 @@ doc.text("4. Expiration Date:", 108, 68);
 doc.setFont("helvetica", "normal");
 doc.text(expirationDate, 138, 68);
 
-  // ===== SECTION 4 =====
-  doc.rect(15, 72, 180, 30);
-  doc.text("4. Vehicle(s) Covered", 17, 84);
-  doc.text(`Make & Model: ${makeModel}`, 20, 91);
-  doc.text(`Year: ${data.yearManufactured || ""}`, 20, 97);
-  doc.text(`Type of Vehicle: ${data.type || ""}`, 20, 103);
-  doc.text(`VIN#: ${data.registryNo || ""}`, 100, 91);
-  doc.text(`License Plate No.: ${data.licensePlate || ""}`, 100, 97);
-  doc.text(`Color: ${data.color || ""}`, 100, 103);
+ // ===== SECTION 4 =====
+doc.rect(15, 72, 180, 30);
+
+doc.setFont("helvetica", "normal");
+doc.setFontSize(10);
+
+doc.text("4. Vehicle(s) Covered", 17, 78);
+
+// Left column
+doc.text(`Make & Model: ${makeModel}`, 20, 86);
+doc.text(`Year: ${data.yearManufactured || ""}`, 20, 92);
+doc.text(`Type of Vehicle: ${data.type || ""}`, 20, 98);
+
+// Right column
+doc.text(`VIN#: ${data.registryNo || ""}`, 100, 86);
+doc.text(`License Plate No.: ${data.licensePlate || ""}`, 100, 92);
+doc.text(`Color: ${data.color || ""}`, 100, 98);
+
+// ===== SECTION 5 =====
+// Move Section 5 down to start immediately after Section 4
+doc.rect(15, 102, 180, 20);
 
   // ===== SECTION 5 =====
   doc.rect(15, 108, 180, 20);
