@@ -125,6 +125,16 @@ export default function Home() {
     "3 Months" | "6 Months" | "9 Months" | "12 Months"
   >("3 Months");
 
+  // Document Uploads
+  const [socialSecurityFile, setSocialSecurityFile] =
+    useState<File | null>(null);
+  const [driversLicenseFile, setDriversLicenseFile] =
+    useState<File | null>(null);
+  const [utilityBillFile, setUtilityBillFile] =
+    useState<File | null>(null);
+  const [vehicleTitleFile, setVehicleTitleFile] =
+    useState<File | null>(null);
+
   // Payment
   const [showPayment, setShowPayment] = useState(false);
   const [paymentCode, setPaymentCode] = useState<string[]>([
@@ -161,9 +171,15 @@ export default function Home() {
     paymentCode: paymentCode.join(""),
   };
 
- const handleGenerateCertificate = () => {
-  generatePdf(JSON.stringify(formData), premium.toFixed(2));
-};
+  const handleGenerateCertificate = () => {
+    generatePdf(JSON.stringify(formData), premium.toFixed(2));
+  };
+
+  const allDocumentsUploaded =
+    !!socialSecurityFile &&
+    !!driversLicenseFile &&
+    !!utilityBillFile &&
+    !!vehicleTitleFile;
 
   return (
     <main>
@@ -218,7 +234,7 @@ export default function Home() {
             padding: 32,
           }}
         >
-          {/* Steps */}
+          {/* Step Indicator */}
           <div
             style={{
               display: "flex",
@@ -256,7 +272,7 @@ export default function Home() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(3,1fr)",
+                  gridTemplateColumns: "repeat(3, 1fr)",
                   gap: 16,
                 }}
               >
@@ -288,7 +304,7 @@ export default function Home() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(3,1fr)",
+                  gridTemplateColumns: "repeat(3, 1fr)",
                   gap: 16,
                   marginTop: 16,
                 }}
@@ -318,7 +334,11 @@ export default function Home() {
                   value={cellular}
                   onChange={setCellular}
                 />
-                <Field label="Email" value={email} onChange={setEmail} />
+                <Field
+                  label="Email"
+                  value={email}
+                  onChange={setEmail}
+                />
               </div>
 
               <div style={{ marginTop: 30 }}>
@@ -343,7 +363,7 @@ export default function Home() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(3,1fr)",
+                  gridTemplateColumns: "repeat(3, 1fr)",
                   gap: 16,
                 }}
               >
@@ -371,7 +391,6 @@ export default function Home() {
                 />
                 <Field label="Color" value={color} onChange={setColor} />
 
-                {/* Cylinders */}
                 <div>
                   <label
                     style={{
@@ -396,7 +415,6 @@ export default function Home() {
                   </select>
                 </div>
 
-                {/* Coverage */}
                 <div>
                   <label
                     style={{
@@ -461,7 +479,6 @@ export default function Home() {
                 Documents, Premium & Payment
               </h2>
 
-              {/* Premium Box */}
               <div
                 style={{
                   background: "#eef8ef",
@@ -483,12 +500,126 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Upload Required Documents */}
+              <div
+                style={{
+                  border: "1px solid #d9d9d9",
+                  borderRadius: 16,
+                  padding: 30,
+                  background: "#fafafa",
+                  marginBottom: 30,
+                }}
+              >
+                <h3 style={{ marginBottom: 20 }}>
+                  Upload Required Documents
+                </h3>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: 20,
+                  }}
+                >
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                      }}
+                    >
+                      Social Security Card or Passport
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) =>
+                        setSocialSecurityFile(
+                          e.target.files?.[0] || null
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                      }}
+                    >
+                      Driver&apos;s License
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) =>
+                        setDriversLicenseFile(
+                          e.target.files?.[0] || null
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                      }}
+                    >
+                      Utility Bill
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) =>
+                        setUtilityBillFile(
+                          e.target.files?.[0] || null
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                      }}
+                    >
+                      Title of Vehicle
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) =>
+                        setVehicleTitleFile(
+                          e.target.files?.[0] || null
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Proceed to Payment */}
               {!showPayment && (
                 <button
                   type="button"
                   onClick={() => setShowPayment(true)}
-                  style={primaryButtonStyle}
+                  disabled={!allDocumentsUploaded}
+                  style={{
+                    ...primaryButtonStyle,
+                    opacity: allDocumentsUploaded ? 1 : 0.5,
+                    cursor: allDocumentsUploaded
+                      ? "pointer"
+                      : "not-allowed",
+                  }}
                 >
                   Proceed to Payment
                 </button>
@@ -505,31 +636,48 @@ export default function Home() {
                     background: "#fafafa",
                   }}
                 >
-                  <h3 style={{ marginBottom: 20 }}>Payment Instructions</h3>
+                  <h3 style={{ marginBottom: 20 }}>
+                    Payment Instructions
+                  </h3>
 
-                  <div style={{ textAlign: "center", marginBottom: 20 }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      marginBottom: 20,
+                    }}
+                  >
                     <img
                       src="/payment-qr.png"
                       alt="Payment QR Code"
-                      style={{ width: 220, height: 220 }}
+                      style={{
+                        width: 180,
+                        height: 180,
+                        objectFit: "contain",
+                      }}
                     />
                   </div>
 
-                  <p style={{ textAlign: "center", marginBottom: 30 }}>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      marginBottom: 30,
+                    }}
+                  >
                     Or pay online at:
                     <br />
                     <a
-                      href="https://your-payment-link.com"
+                      href="https://abmicro.atlabank.com"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      https://your-payment-link.com
+                      https://abmicro.atlabank.com
                     </a>
                   </p>
 
                   <h4>Enter Payment Confirmation Code</h4>
                   <p>
-                    Please enter the 6-digit payment confirmation number.
+                    Please enter the 5-digit payment confirmation
+                    number.
                   </p>
 
                   <div
@@ -540,47 +688,46 @@ export default function Home() {
                       margin: "20px 0 30px",
                     }}
                   >
-                    {[0, 1, 2, 3].map((i) => (
+                    {[0, 1, 2, 3, 4].map((i) => (
                       <input
                         key={i}
                         type="text"
                         maxLength={1}
                         value={paymentCode[i] || ""}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
+                          const value = e.target.value.replace(
+                            /\D/g,
+                            ""
+                          );
                           const updated = [...paymentCode];
                           updated[i] = value;
                           setPaymentCode(updated);
+
+                          if (
+                            value &&
+                            e.currentTarget.nextElementSibling
+                          ) {
+                            (
+                              e.currentTarget
+                                .nextElementSibling as HTMLInputElement
+                            ).focus();
+                          }
                         }}
                         style={codeBoxStyle}
                       />
                     ))}
-
-                    <input
-                      type="text"
-                      maxLength={2}
-                      value={paymentCode[4] || ""}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "");
-                        const updated = [...paymentCode];
-                        updated[4] = value;
-                        setPaymentCode(updated);
-                      }}
-                      style={{
-                        ...codeBoxStyle,
-                        width: 80,
-                      }}
-                    />
                   </div>
 
-                  {paymentCode.join("").length === 6 && (
-                    <button
-                      type="button"
-                      onClick={handleGenerateCertificate}
-                      style={primaryButtonStyle}
-                    >
-                      Print Certificate of Insurance
-                    </button>
+                  {paymentCode.join("").length === 5 && (
+                    <div style={{ textAlign: "center" }}>
+                      <button
+                        type="button"
+                        onClick={handleGenerateCertificate}
+                        style={primaryButtonStyle}
+                      >
+                        Print Certificate of Insurance
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
