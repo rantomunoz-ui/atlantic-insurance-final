@@ -401,74 +401,76 @@ export async function generateCertificateOfInsurance(
     useY
   );
 
-  // ===========================================================================
-  // EXCLUSIONS
-  // ===========================================================================
-  y += 42;
+ // ===========================================================================
+// EXCLUSIONS SECTION
+// ===========================================================================
 
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(sectionTitleSize);
-  doc.text("EXCLUSIONS", pageWidth / 2, y + 6, {
-    align: "center",
-  });
+y += 42; 
 
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(bodyFontSize);
+const exclusionsHeight = 28;
+doc.rect(margin, y, contentWidth, exclusionsHeight);
 
-  doc.text(
-    "L  Conveyance of passengers for hire or reward.",
-    margin + 6,
-    y + 12
-  );
+// Title
+doc.setFont("helvetica", "bold");
+doc.setFontSize(sectionTitleSize);
+doc.text("EXCLUSIONS", pageWidth / 2, y + 6, {
+  align: "center",
+});
 
-  doc.text(
-    "O  Use whilst drawing a trailer except where permitted.",
-    margin + 100,
-    y + 12
-  );
+// Content
+doc.setFont("helvetica", "normal");
+doc.setFontSize(bodyFontSize);
 
-  doc.text(
-    "M  Use for commercial traveling or Motor Trade.",
-    margin + 6,
-    y + 18
-  );
+// Left column
+doc.text(
+  "L  Conveyance of passengers for hire or reward.",
+  margin + 6,
+  y + 12
+);
 
-  doc.text(
-    "P  Use for Agriculture or Forestry purposes.",
-    margin + 100,
-    y + 18
-  );
+doc.text(
+  "M  Use for commercial traveling or Motor Trade.",
+  margin + 6,
+  y + 18
+);
 
-  doc.text(
-    "N  Use for hire or reward.",
-    margin + 6,
-    y + 24
-  );
+doc.text(
+  "N  Use for hire or reward.",
+  margin + 6,
+  y + 24
+);
 
-  // ===========================================================================
-  // FOOTER
-  // ===========================================================================
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(9);
+// Right column
+doc.text(
+  "O  Use whilst drawing a trailer except where permitted.",
+  margin + 100,
+  y + 12
+);
 
-  doc.text(
-    "This Certificate of Insurance is valid for 24 hours from time issued.",
-    margin,
-    pageHeight - 8
-  );
+doc.text(
+  "P  Use for Agriculture or Forestry purposes.",
+  margin + 100,
+  y + 18
+);
 
-  doc.setFont("helvetica", "normal");
-  doc.text(
-    `Issued on: ${formatIssuedDateTime()}`,
-    pageWidth - margin,
-    pageHeight - 8,
-    { align: "right" }
-  );
+// ===========================================================================
+// FOOTER
+// Move footer below the EXCLUSIONS box.
+// ===========================================================================
 
-  // ===========================================================================
-  // SAVE
-  // ===========================================================================
-  doc.save(
-    `Certificate_of_Insurance_${data.certificateNumber}.pdf`
-  );
-}
+doc.setFont("helvetica", "bold");
+doc.setFontSize(9);
+
+doc.text(
+  "This Certificate of Insurance is valid for 24 hours from time issued.",
+  margin,
+  y + exclusionsHeight + 8
+);
+
+doc.setFont("helvetica", "normal");
+doc.text(
+  `Issued on: ${formatIssuedDateTime()}`,
+  pageWidth - margin,
+  y + exclusionsHeight + 8,
+  { align: "right" }
+);
