@@ -39,8 +39,8 @@ export async function generatePdf(data: string, premium: string) {
   await generateCertificateOfInsurance({
     certificateNumber: `ONLINE-${Math.floor(10000 + Math.random() * 90000)}`,
     policyNumber: `BN.${Math.floor(
-      1000 + Math.random() * 9000.${new Date().getFullYear()}
-    )}`,
+  1000 + Math.random() * 9000
+)}.${new Date().getFullYear()}`,
     policyholderName: insuredName,
     commencementDate: commencementDate.toISOString(),
     expiryDate: expiryDate.toISOString(),
