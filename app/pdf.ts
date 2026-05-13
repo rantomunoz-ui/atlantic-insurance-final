@@ -41,7 +41,7 @@ switch (formData.coverage) {
   // Generate certificate
   await generateCertificateOfInsurance({
     certificateNumber: `ONLINE-${Math.floor(10000 + Math.random() * 90000)}`,
-    policyNumber: `BN.${Math.floor(
+    policyNumber: `PE.${Math.floor(
   1000 + Math.random() * 9000
 )}.${new Date().getFullYear()}`,
     policyholderName: insuredName,
